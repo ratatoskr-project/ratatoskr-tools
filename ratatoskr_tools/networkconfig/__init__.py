@@ -1,6 +1,13 @@
+import os
+import shutil
 import xml.etree.ElementTree as ET
 from . import configure
 from . import xml_writers as writers
+
+def create_config_ini(dst_path="./config.ini"):
+    src_path = os.path.dirname(__file__)
+    src_path = os.path.join(src_path, "config.ini")
+    shutil.copyfile(src_path, dst_path)
 
 
 def create_xml(config_file='config.ini', config_xml='config.xml', network_xml='network.xml'):
