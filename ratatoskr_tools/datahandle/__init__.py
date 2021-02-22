@@ -1,6 +1,5 @@
 from .combine_hists import *
 import pandas as pd
-import csv
 
 
 def retrieve_vc_usages(simdirs):
@@ -41,32 +40,6 @@ def retrieve_buff_usages(simdirs):
             BuffUsage_temp[l][d] = np.ceil(BuffUsage_inj[l][d] / len(simdirs))
 
     return BuffUsage_temp
-
-
-
-def get_latencies(latencies_results_file):
-    """
-    Read the resulting latencies from the csv file.
-
-    Parameters:
-        - results_file: the path to the result file.
-
-    Return:
-        - A list of the filt, packet and network latencies.
-    """
-    latencies = []
-    try:
-        with open(latencies_results_file, newline='') as f:
-            spamreader = csv.reader(f, delimiter=' ', quotechar='|')
-            for row in spamreader:
-                latencies.append(row[1])
-    except Exception:
-        # Add dummy values to latencies, -1.
-        latencies.append(-1)
-        latencies.append(-1)
-        latencies.append(-1)
-
-    return(latencies)
 
 
 def retrieve_diff_latencies(simdirs):
