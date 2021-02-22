@@ -24,8 +24,6 @@ import os
 import glob as glob
 from PyPDF2 import PdfFileMerger
 import numpy as np
-import pickle
-from mpl_toolkits.mplot3d import Axes3D
 import matplotlib.pyplot as plt
 plt.rcParams.update({'figure.max_open_warning': 0})
 ###############################################################################
