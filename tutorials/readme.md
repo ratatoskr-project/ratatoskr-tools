@@ -5,6 +5,10 @@ ratatoskr-tools is an API that helps the user to automate the simulation of rata
 
 This is an tutorial that teaches the user how to use the provided API.
 
+## Prerequisite
+
+Before this tutorial, it is required to compile retrieve the execution simulator file "./sim" from the ratatoskr/simulator repository.
+
 ## Network configuration
 
 Let's start with the network configuration. First, we create a config.ini file, which is a file to make up your simulation settings. In default, you will do a 4x4 Mesh simulation. You can change the settings yourself freely.
@@ -38,7 +42,7 @@ You can output the plotted network to a PNG file by giving the arguments too.
 
 
 ```python
-output_file = "./exampl/plot.png"
+output_file = "./example/plot.png"
 ```
 
 However, in this tutorial the plot is showed through the argument (during the automation it is better to turn it off):
@@ -59,7 +63,7 @@ fig_network = rtnplt.plot_static("./example/network.xml", "./example/config.ini"
 
 
     
-![png](readme_files/readme_10_0.png)
+![png](readme_files/readme_11_0.png)
     
 
 
@@ -95,7 +99,7 @@ Before the simulation, it is recommended to clean the dummy directories to ensur
 rtsim.remove_all_simdirs("./example/", config.restarts)
 ```
 
-The, we can start to simulate according to different injection rates. 
+Then, we can start to simulate according to different injection rates. If you still haven't done the prerequisite (compile and retrieve the ./sim, please get it from the ratatoskr repository. Otherwise, you would not be able to continue this section).
 
 Within the loop, we will first create the dummy simulation directories for repetitive simultion with same injection rate. (Here, the config.ini restarts default is 4 times).
 
@@ -137,11 +141,11 @@ fig_latencies = rtdplt.plot_latencies(inj_rates, lats_flit, lats_network, lats_p
 
 
     
-![png](readme_files/readme_20_0.png)
+![png](readme_files/readme_21_0.png)
     
 
 
-The plotting for vc usages ans buff usages are a lot, so we will first store it in the list without showing it (This is jupyter notebook, the result would still be showed =P).
+The plotting for vc usages ans buff usages are a lot, so we will first store it in the list without showing it.
 
 
 ```python
