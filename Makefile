@@ -32,6 +32,8 @@ clean:
 	find . -name '${venvdir}' -type d | xargs rm -rf
 	find . -name 'source_me.sh' -delete
 	find . -name 'nosetest_results.txt' -delete
+	rm -rf dist
+	rm -rf build
 
 # Perform automatic test on the Python after building it
 nosetest_results.txt: ${venvdir} test test/*
