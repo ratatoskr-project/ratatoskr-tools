@@ -1,9 +1,25 @@
 import os
 import subprocess
+import multiprocessing
 from joblib import Parallel, delayed
 
 
 def make_all_simdirs(basedir, restarts):
+    """
+    Create the dummy simulation directories according to the given restarts value.
+
+    Parameters
+    ----------
+    basedir : str
+        The base directory that will contain all dummy simulation directories.
+    restarts : int
+        The amount of the simulation that will be repeated.
+
+    Returns
+    -------
+    list(str)
+        A list of dummy simulation directories.
+    """
 
     simdirs = ["/".join([basedir, "sim{}".format(restart)])
                for restart in range(restarts)]
@@ -16,6 +32,16 @@ def make_all_simdirs(basedir, restarts):
 
 
 def remove_all_simdirs(basedir, restarts):
+    """
+    Remove the created dummy simulation directories and all the files which they contains.
+
+    Parameters
+    ----------
+    basedir : str
+        The base directory that will contain all dummy simulation directories.
+    restarts : int
+        The amount of the simulation that will be repeated.
+    """
 
     simdirs = ["/".join([basedir, "sim{}".format(restart)])
                for restart in range(restarts)]
@@ -25,7 +51,22 @@ def remove_all_simdirs(basedir, restarts):
         os.system(cmd)
 
 
-def run_single_sim(simulator="./simulator/sim", config_path="./config/config.xml", network_path="./config/network.xml", output_dir="."):
+def run_single_sim(simulator, config_path, network_path, output_dir="."):
+    """
+    Run the simulation once according to the given config_path and network_path.
+    Then, the result of the simulation is outputted to the output_dir.
+
+    Parameters
+    ----------
+    simulator : str
+        The path of the simulator executor "./sim"
+    config_path : str
+        The path of input "config.xml" file for the simulator.
+    network_path : str, optional
+        The path of input "network.xml" file for the simulator.
+    output_dir : str, optional
+        The directory of the simulation result which is stored, by default "."
+    """
 
     outfile = open(output_dir + "/log", "w")
 
@@ -40,7 +81,25 @@ def run_single_sim(simulator="./simulator/sim", config_path="./config/config.xml
         print("ERROR:", args)
 
 
-def run_parallel_multiple_sims(num_cores, simdirs, simulator="./simulator/sim", config_path="./config/config.xml", network_path="./config/network.xml"):
+def run_parallel_multiple_sims(simdirs, simulator, config_path, network_path,
+                               num_cores=multiprocessing.cpu_count()):
+    """
+    Run the simulation parallely.
+
+    Parameters
+    ----------
+    simdirs : list(str)
+        The list of dummy simulation directories.
+    simulator : str
+        The path of the simulator executor "./sim"
+    config_path : str
+        The path of input "config.xml" file for the simulator.
+    network_path : str, optional
+        The path of input "network.xml" file for the simulator.
+    num_cores : int, optional
+        The number of parallel threads to parallel the simulation process,
+        by default multiprocessing.cpu_count()
+    """
 
     Parallel(n_jobs=num_cores)(delayed(run_single_sim)
                                (simulator, config_path, network_path, simdir) for simdir in simdirs)
