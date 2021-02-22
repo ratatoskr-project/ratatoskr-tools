@@ -31,7 +31,7 @@ plt.rcParams.update({'figure.max_open_warning': 0})
 ###############################################################################
 
 
-def plot_latencies(results, xmin=0, xmax=0.1):
+def plot_latencies(results, xmin=0, xmax=0.1, output_img="", plt_show=False):
     """
     Read the raw results from a dictionary of objects, then plot the latencies.
 
@@ -56,8 +56,8 @@ def plot_latencies(results, xmin=0, xmax=0.1):
     fig = plt.figure()
     plt.ylabel('Latencies in ns', fontsize=11)
     plt.xlabel('Injection Rate', fontsize=11)
-    # plt.xlim([xmin, xmax])
-    # plt.ylim([0, (meanLatenciesPacket[-1] + 4* stdLatenciesPacket[-1])])
+    plt.xlim([xmin, xmax])
+    plt.ylim([0, (meanLatenciesPacket[-1] + 4* stdLatenciesPacket[-1])])
     linestyle = {'linestyle': '--', 'linewidth': 1, 'markeredgewidth': 1,
                  'elinewidth': 1, 'capsize': 10}
     plt.errorbar(injectionRates, meanLatenciesFlit,
@@ -70,8 +70,13 @@ def plot_latencies(results, xmin=0, xmax=0.1):
 
     plt.legend(['Flit', 'Network', 'Packet'])
     # fig.suptitle('Latencies', fontsize=16)
-    plt.show()
-    # fig.savefig('latencies.pdf')
+
+    if plt_show == True:
+        plt.show()
+
+    if output_img != "":
+        fig.savefig(output_img)
+
     return fig
 ###############################################################################
 
