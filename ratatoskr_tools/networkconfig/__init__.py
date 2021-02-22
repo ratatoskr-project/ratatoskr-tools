@@ -23,22 +23,22 @@ def create_configuration(config_file='config.ini', config_xml='config.xml', netw
     return config
 
 
-def edit_config_file(config, configFileSrc, configFileDst, injectionRate):
+def edit_config_file(config, src_config_xml, dst_config_xml, inj_rate):
     """
     Edit the injection rate of the config.xml.
     Write the configuration file for the urand simulation.
 
     Parameters:
         - config: configuration object.
-        - configFileSrc: the source of the configuration file.
-        - configFileDst: the destination of the config file.
-        - injectionRate: the injection rate.
+        - src_config_xml: the source of the configuration file.
+        - dst_config_xml: the destination of the config file.
+        - inj_rate: the injection rate.
 
     Return:
         - None.
     """
     try:
-        configTree = ET.parse(configFileSrc)
+        configTree = ET.parse(src_config_xml)
     except Exception:
         raise
 
@@ -57,7 +57,7 @@ def edit_config_file(config, configFileSrc, configFileDst, injectionRate):
                                       str(config.warmupStart + config.warmupDuration))
             elem.find('duration').set('max',
                                       str(config.warmupStart + config.warmupDuration))
-            elem.find('injectionRate').set('value', str(injectionRate))
+            elem.find('injectionRate').set('value', str(inj_rate))
         if elem.get('name') == 'run':
             elem.find('start').set('min', str(config.runStart))
             elem.find('start').set('max', str(config.runStart))
@@ -65,5 +65,5 @@ def edit_config_file(config, configFileSrc, configFileDst, injectionRate):
                 config.runStart + config.runDuration))
             elem.find('duration').set('max', str(
                 config.runStart + config.runDuration))
-            elem.find('injectionRate').set('value', str(injectionRate))
-    configTree.write(configFileDst)
+            elem.find('injectionRate').set('value', str(inj_rate))
+    configTree.write(dst_config_xml)
