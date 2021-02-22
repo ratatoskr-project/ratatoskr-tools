@@ -24,8 +24,8 @@ def retrieve_vc_usages(simdirs):
         vc_usage_run = combine_vc_hists(simdir + "/VCUsage")
 
         if vc_usage_run is not None:
-            for ix, layer_df in enumerate(vc_usage_run):
-                vc_usage_inj[ix] = pd.concat([vc_usage_inj[ix], layer_df])
+            for idx, layer_df in enumerate(vc_usage_run):
+                vc_usage_inj[idx] = pd.concat([vc_usage_inj[idx], layer_df])
 
     # Calculate the average and std for VC usage.
     vc_usage_temp = []
