@@ -21,8 +21,6 @@
 # SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 ###############################################################################
 import os
-import glob as glob
-from PyPDF2 import PdfFileMerger
 import numpy as np
 import matplotlib.pyplot as plt
 plt.rcParams.update({'figure.max_open_warning': 0})
@@ -178,24 +176,3 @@ def plot_BuffUsage_stats(inj_dicts, inj_rates, output_dir=None, plt_show=False):
     return figs
 ###############################################################################
 
-
-def merge_pdfs(output_path):
-    """Merge the generated reports in one pdf."""
-    try:
-        os.remove(output_path)
-    except FileNotFoundError:
-        pass
-
-    input_paths = glob.glob('*.pdf')
-    input_paths.sort()
-    pdf_merger = PdfFileMerger()
-
-    for path in input_paths:
-        pdf_merger.append(path)
-
-    with open(output_path, 'wb') as fileobj:
-        pdf_merger.write(fileobj)
-
-    for path in input_paths:
-        os.remove(path)
-###############################################################################
