@@ -6,12 +6,37 @@ from . import xml_writers as writers
 
 
 def create_config_ini(dst_path="./config.ini"):
+    """
+    Create the config.ini file for the given destination path.
+
+    Parameters
+    ----------
+    dst_path : str, optional
+        The destination path of the config file, by default "./config.ini"
+    """
     src_path = os.path.dirname(__file__)
     src_path = os.path.join(src_path, "config.ini")
     shutil.copyfile(src_path, dst_path)
 
 
 def create_configuration(config_file='config.ini', config_xml='config.xml', network_xml='network.xml'):
+    """
+    Create the config.xml and network.xml files for the simulator from the given config.ini file.
+
+    Parameters
+    ----------
+    config_file : str, optional
+        Input configuration file, by default 'config.ini'
+    config_xml : str, optional
+        Output configuration xml file for the simulator, by default 'config.xml'
+    network_xml : str, optional
+        Output network xml file for the simulator, by default 'network.xml'
+
+    Returns
+    -------
+    ratatoskr_tools.networkconfig.configure.Configuration
+        The read config.ini file information
+    """
     config = configure.Configuration(config_file)
 
     writer = writers.ConfigWriter(config)
@@ -28,14 +53,16 @@ def edit_config_file(config, src_config_xml, dst_config_xml, inj_rate):
     Edit the injection rate of the config.xml.
     Write the configuration file for the urand simulation.
 
-    Parameters:
-        - config: configuration object.
-        - src_config_xml: the source of the configuration file.
-        - dst_config_xml: the destination of the config file.
-        - inj_rate: the injection rate.
-
-    Return:
-        - None.
+    Parameters
+    ----------
+    config : ratatoskr_tools.networkconfig.configure.Configuration
+        configuration object.
+    src_config_xml : str
+        the source of the configuration file.
+    dst_config_xml : str
+        the destination of the config file.
+    inj_rate : float
+        the injection rate.
     """
     try:
         configTree = ET.parse(src_config_xml)
