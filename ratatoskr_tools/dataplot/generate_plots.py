@@ -166,23 +166,6 @@ def plot_BuffUsage_stats(inj_dicts, inj_rates, output_dir="./", plt_show=False):
 ###############################################################################
 
 
-def read_raw_results(results_file):
-    """
-    Read the raw results from the pickle file.
-
-    Parameters:
-        - results_file: the path to the pickle file.
-
-    Return:
-        - results: a dictionary of objects.
-    """
-    results = None
-    with open(results_file, 'rb') as f:
-        results = pickle.load(f)
-    return results
-###############################################################################
-
-
 def merge_pdfs(output_path):
     """Merge the generated reports in one pdf."""
     try:
@@ -203,21 +186,3 @@ def merge_pdfs(output_path):
     for path in input_paths:
         os.remove(path)
 ###############################################################################
-
-
-def main():
-    """Main Point of Execution."""
-    results = read_raw_results('rawResults-fitting.pkl')
-
-    plot_latencies(results)
-
-    # plot_VCUsage_stats(results['VCUsage'], results['injectionRates'])
-
-    # plot_BuffUsage_stats(results['BuffUsage'], results['injectionRates'])
-
-    # merge_pdfs('performance_buffer_VCUsage_report.pdf')
-###############################################################################
-
-
-if __name__ == '__main__':
-    main()
