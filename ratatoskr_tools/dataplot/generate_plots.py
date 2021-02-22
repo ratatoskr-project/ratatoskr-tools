@@ -57,7 +57,7 @@ def plot_latencies(results, xmin=0, xmax=0.1, output_img="", plt_show=False):
     plt.ylabel('Latencies in ns', fontsize=11)
     plt.xlabel('Injection Rate', fontsize=11)
     plt.xlim([xmin, xmax])
-    plt.ylim([0, (meanLatenciesPacket[-1] + 4* stdLatenciesPacket[-1])])
+    plt.ylim([0, (meanLatenciesPacket[-1] + 4 * stdLatenciesPacket[-1])])
     linestyle = {'linestyle': '--', 'linewidth': 1, 'markeredgewidth': 1,
                  'elinewidth': 1, 'capsize': 10}
     plt.errorbar(injectionRates, meanLatenciesFlit,
@@ -81,7 +81,7 @@ def plot_latencies(results, xmin=0, xmax=0.1, output_img="", plt_show=False):
 ###############################################################################
 
 
-def plot_VCUsage_stats(inj_dfs, inj_rates):
+def plot_VCUsage_stats(inj_dfs, inj_rates, output_dir="./", plt_show=False):
     """
     Plot the VC usage statistics.
 
@@ -103,12 +103,17 @@ def plot_VCUsage_stats(inj_dfs, inj_rates):
                 plt.errorbar(df.index.values, df[col, 'mean'].values,
                              yerr=df[col, 'std'].values)
             plt.legend(df.columns.levels[0].values)
-            # plt.show()
-            fig.savefig('VC_' + str(layer_id) + '_' + str(inj_rate) + '.pdf')
+
+            if plt_show == True:
+                plt.show()
+
+            output_path = os.path.join(output_dir, 'VC_' + str(layer_id) +
+                                       '_' + str(inj_rate) + '.pdf')
+            fig.savefig(output_path)
 ###############################################################################
 
 
-def plot_BuffUsage_stats(inj_dicts, inj_rates):
+def plot_BuffUsage_stats(inj_dicts, inj_rates, output_dir="./", plt_show=False):
     """
     Plot the buffer usage statistics.
 
@@ -151,8 +156,13 @@ def plot_BuffUsage_stats(inj_dicts, inj_rates):
 
             fig.suptitle('Layer: '+str(layer_name)+', Injection Rate = '
                          + str(inj_rate), fontsize=16)
-            # plt.show()
-            fig.savefig('Buff_' + str(layer_id) + '_' + str(inj_rate) + '.pdf')
+
+            if plt_show == True:
+                plt.show()
+
+            output_path = os.path.join(output_dir, 'Buff_' + str(layer_id) +
+                                       '_' + str(inj_rate) + '.pdf')
+            fig.savefig(output_path)
 ###############################################################################
 
 
