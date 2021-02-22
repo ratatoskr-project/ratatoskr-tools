@@ -29,7 +29,7 @@ plt.rcParams.update({'figure.max_open_warning': 0})
 ###############################################################################
 
 
-def plot_latencies(results, xmin=0, xmax=0.1, output_img="", plt_show=False):
+def plot_latencies(results, xmin=0, xmax=0.1, output_file=None, plt_show=False):
     """
     Read the raw results from a dictionary of objects, then plot the latencies.
 
@@ -67,19 +67,20 @@ def plot_latencies(results, xmin=0, xmax=0.1, output_img="", plt_show=False):
                  color='g', **linestyle, marker='^')
 
     plt.legend(['Flit', 'Network', 'Packet'])
-    # fig.suptitle('Latencies', fontsize=16)
+    fig.suptitle('Latencies', fontsize=16)
 
     if plt_show == True:
         plt.show()
 
-    if output_img != "":
-        fig.savefig(output_img)
+    if output_file != None:
+        assert os.path.isfile(output_file)
+        fig.savefig(output_file)
 
     return fig
 ###############################################################################
 
 
-def plot_VCUsage_stats(inj_dfs, inj_rates, output_dir="./", plt_show=False):
+def plot_VCUsage_stats(inj_dfs, inj_rates, output_dir=None, plt_show=False):
     """
     Plot the VC usage statistics.
 
@@ -90,6 +91,7 @@ def plot_VCUsage_stats(inj_dfs, inj_rates, output_dir="./", plt_show=False):
     Return:
         - None.
     """
+    figs = []
     for inj_df, inj_rate in zip(inj_dfs, inj_rates):
         for layer_id, df in enumerate(inj_df):
             fig = plt.figure()  # plot a figure for each inj_rate and layer
@@ -105,13 +107,19 @@ def plot_VCUsage_stats(inj_dfs, inj_rates, output_dir="./", plt_show=False):
             if plt_show == True:
                 plt.show()
 
-            output_path = os.path.join(output_dir, 'VC_' + str(layer_id) +
-                                       '_' + str(inj_rate) + '.pdf')
-            fig.savefig(output_path)
+            if output_dir != None:
+                assert os.path.isdir(output_dir)
+                output_path = os.path.join(output_dir, 'VC_' + str(layer_id) +
+                                        '_' + str(inj_rate) + '.pdf')
+                fig.savefig(output_path)
+
+            figs.append(fig)
+
+    return figs
 ###############################################################################
 
 
-def plot_BuffUsage_stats(inj_dicts, inj_rates, output_dir="./", plt_show=False):
+def plot_BuffUsage_stats(inj_dicts, inj_rates, output_dir=None, plt_show=False):
     """
     Plot the buffer usage statistics.
 
@@ -122,6 +130,7 @@ def plot_BuffUsage_stats(inj_dicts, inj_rates, output_dir="./", plt_show=False):
     Return:
         - None.
     """
+    figs = []
     for inj_dict, inj_rate in zip(inj_dicts, inj_rates):
         for layer_id, layer_name in enumerate(inj_dict):
             layer_dict = inj_dict[layer_name]
@@ -158,9 +167,15 @@ def plot_BuffUsage_stats(inj_dicts, inj_rates, output_dir="./", plt_show=False):
             if plt_show == True:
                 plt.show()
 
-            output_path = os.path.join(output_dir, 'Buff_' + str(layer_id) +
-                                       '_' + str(inj_rate) + '.pdf')
-            fig.savefig(output_path)
+            if output_dir != None:
+                assert os.path.isdir(output_dir)
+                output_path = os.path.join(output_dir, 'Buff_' + str(layer_id) +
+                                        '_' + str(inj_rate) + '.pdf')
+                fig.savefig(output_path)
+
+            figs.append(fig)
+
+    return figs
 ###############################################################################
 
 

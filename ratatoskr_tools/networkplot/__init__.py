@@ -1,8 +1,8 @@
-
+import os
 from . import plot_network
 
 
-def plot_static(network_xml="network.xml", config_file="config.ini", output_img="", plt_show=False):
+def plot_static(network_xml="network.xml", config_file="config.ini", output_file=None, plt_show=False):
     """[summary]
 
     Args:
@@ -19,10 +19,11 @@ def plot_static(network_xml="network.xml", config_file="config.ini", output_img=
     plot_network.create_faces()
     plot_network.plot_faces()
 
-    if output_img != "":
-        plot_network.plt.savefig(output_img)
+    if output_file != None:
+        assert os.path.isfile(output_file)
+        plot_network.plt.savefig(output_file)
 
     if plt_show:
         plot_network.plt.show()
 
-    plot_network.plt.close()
+    return plot_network.fig
