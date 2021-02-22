@@ -4,13 +4,14 @@ import xml.etree.ElementTree as ET
 from . import configure
 from . import xml_writers as writers
 
+
 def create_config_ini(dst_path="./config.ini"):
     src_path = os.path.dirname(__file__)
     src_path = os.path.join(src_path, "config.ini")
     shutil.copyfile(src_path, dst_path)
 
 
-def create_xml(config_file='config.ini', config_xml='config.xml', network_xml='network.xml'):
+def create_configuration(config_file='config.ini', config_xml='config.xml', network_xml='network.xml'):
     config = configure.Configuration(config_file)
 
     writer = writers.ConfigWriter(config)
@@ -22,7 +23,7 @@ def create_xml(config_file='config.ini', config_xml='config.xml', network_xml='n
     return config
 
 
-def write_config_file(config, configFileSrc, configFileDst, injectionRate):
+def edit_config_file(config, configFileSrc, configFileDst, injectionRate):
     """
     Edit the injection rate of the config.xml.
     Write the configuration file for the urand simulation.
