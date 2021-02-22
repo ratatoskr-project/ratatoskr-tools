@@ -78,19 +78,19 @@ def plot_latencies(results, xmin=0, xmax=0.1, output_file=None, plt_show=False):
 ###############################################################################
 
 
-def plot_VCUsage_stats(inj_dfs, inj_rates, output_dir=None, plt_show=False):
+def plot_vc_usage_stats(vc_usages, inj_rates, output_dir=None, plt_show=False):
     """
     Plot the VC usage statistics.
 
     Parameteres:
-        - inj_dfs: the data frames of an injection rate.
+        - vc_usages: the data frames of an injection rate.
         - inj_rates: the number of injection rates.
 
     Return:
         - None.
     """
     figs = []
-    for inj_df, inj_rate in zip(inj_dfs, inj_rates):
+    for inj_df, inj_rate in zip(vc_usages, inj_rates):
         for layer_id, df in enumerate(inj_df):
             fig = plt.figure()  # plot a figure for each inj_rate and layer
             plt.title('Layer ' + str(layer_id) +
@@ -108,7 +108,7 @@ def plot_VCUsage_stats(inj_dfs, inj_rates, output_dir=None, plt_show=False):
             if output_dir != None:
                 assert os.path.isdir(output_dir)
                 output_path = os.path.join(output_dir, 'VC_' + str(layer_id) +
-                                        '_' + str(inj_rate) + '.pdf')
+                                           '_' + str(inj_rate) + '.pdf')
                 fig.savefig(output_path)
 
             figs.append(fig)
@@ -117,19 +117,19 @@ def plot_VCUsage_stats(inj_dfs, inj_rates, output_dir=None, plt_show=False):
 ###############################################################################
 
 
-def plot_BuffUsage_stats(inj_dicts, inj_rates, output_dir=None, plt_show=False):
+def plot_buff_usage_stats(buff_usages, inj_rates, output_dir=None, plt_show=False):
     """
     Plot the buffer usage statistics.
 
     Parameters:
-        - inj_dicts: the data dictionaries of an injection rate.
+        - buff_usages: the data dictionaries of an injection rate.
         - inj_rates: the number of injection rates.
 
     Return:
         - None.
     """
     figs = []
-    for inj_dict, inj_rate in zip(inj_dicts, inj_rates):
+    for inj_dict, inj_rate in zip(buff_usages, inj_rates):
         for layer_id, layer_name in enumerate(inj_dict):
             layer_dict = inj_dict[layer_name]
             fig = plt.figure()
@@ -168,11 +168,10 @@ def plot_BuffUsage_stats(inj_dicts, inj_rates, output_dir=None, plt_show=False):
             if output_dir != None:
                 assert os.path.isdir(output_dir)
                 output_path = os.path.join(output_dir, 'Buff_' + str(layer_id) +
-                                        '_' + str(inj_rate) + '.pdf')
+                                           '_' + str(inj_rate) + '.pdf')
                 fig.savefig(output_path)
 
             figs.append(fig)
 
     return figs
 ###############################################################################
-
