@@ -1,7 +1,7 @@
 
 venvdir := venv
 
-all: clean create_venv jupyter_spellcheck nosetest_results.txt
+all: clean create_venv
 	@echo "Done"
 
 create_venv: ${venvdir}
@@ -17,11 +17,6 @@ ${venvdir}: requirements.txt
 	touch source_me.sh
 	echo "source ${venvdir}/bin/activate" > source_me.sh
 
-jupyter_spellcheck: venv
-	${venvdir}/bin/jupyter contrib nbextension install --user
-	${venvdir}/bin/jupyter nbextension enable spellchecker/main
-
-
 # Clean Python and Emacs backup and cache files
 clean:
 	find . -name '*.pyc' -delete
@@ -35,9 +30,3 @@ clean:
 	rm -rf dist
 	rm -rf build
 
-# Perform automatic test on the Python after building it
-nosetest_results.txt: ${venvdir} test test/*
-	. ${venvdir}/bin/activate && nosetests -s > $@  2>&1 || rm -f $@
-
-
-.PHONY: all create_venv clean jupyter_spellcheck
