@@ -65,10 +65,10 @@ def plot_latencies(inj_rates, latencies_flit, latencies_network, latencies_packe
     plt.legend(['Flit', 'Network', 'Packet'])
     fig.suptitle('Latencies', fontsize=16)
 
-    if plt_show == True:
+    if plt_show is True:
         plt.show()
 
-    if output_file != None:
+    if output_file is not None:
         assert os.path.isfile(output_file)
         fig.savefig(output_file)
 
@@ -100,10 +100,10 @@ def plot_vc_usage_stats(vc_usages, inj_rates, output_dir=None, plt_show=False):
                              yerr=df[col, 'std'].values)
             plt.legend(df.columns.levels[0].values)
 
-            if plt_show == True:
+            if plt_show is True:
                 plt.show()
 
-            if output_dir != None:
+            if output_dir is not None:
                 assert os.path.isdir(output_dir)
                 output_path = os.path.join(output_dir, 'VC_' + str(layer_id) +
                                            '_' + str(inj_rate) + '.pdf')
@@ -160,10 +160,10 @@ def plot_buff_usage_stats(buff_usages, inj_rates, output_dir=None, plt_show=Fals
             fig.suptitle('Layer: '+str(layer_name)+', Injection Rate = '
                          + str(inj_rate), fontsize=16)
 
-            if plt_show == True:
+            if plt_show is True:
                 plt.show()
 
-            if output_dir != None:
+            if output_dir is not None:
                 assert os.path.isdir(output_dir)
                 output_path = os.path.join(output_dir, 'Buff_' + str(layer_id) +
                                            '_' + str(inj_rate) + '.pdf')
