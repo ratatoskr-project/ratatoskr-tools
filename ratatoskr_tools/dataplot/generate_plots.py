@@ -27,7 +27,7 @@ plt.rcParams.update({'figure.max_open_warning': 0})
 ###############################################################################
 
 
-def plot_latencies(results, xmin=0, xmax=0.1, output_file=None, plt_show=False):
+def plot_latencies(inj_rates, latencies_flit, latencies_network, latencies_packet, xmin=0, xmax=0.1, output_file=None, plt_show=False):
     """
     Read the raw results from a dictionary of objects, then plot the latencies.
 
@@ -37,31 +37,29 @@ def plot_latencies(results, xmin=0, xmax=0.1, output_file=None, plt_show=False):
     Return:
         - None.
     """
-    latenciesFlit = results['latenciesFlit']
-    latenciesNetwork = results['latenciesNetwork']
-    latenciesPacket = results['latenciesPacket']
-    injectionRates = results['injectionRates']
 
-    meanLatenciesFlit = np.mean(latenciesFlit, axis=1)
-    meanLatenciesPacket = np.mean(latenciesPacket, axis=1)
-    meanLatenciesNetwork = np.mean(latenciesNetwork, axis=1)
-    stdLatenciesFlit = np.std(latenciesFlit, axis=1)
-    stdLatenciesPacket = np.std(latenciesPacket, axis=1)
-    stdLatenciesNetwork = np.std(latenciesNetwork, axis=1)
+    mean_latencies_flit = np.mean(latencies_flit, axis=1)
+    mean_latencies_packet = np.mean(latencies_packet, axis=1)
+    mean_latencies_network = np.mean(latencies_network, axis=1)
+
+    std_latencies_packet = np.std(latencies_packet, axis=1)
+    std_latencies_network = np.std(latencies_network, axis=1)
 
     fig = plt.figure()
+
     plt.ylabel('Latencies in ns', fontsize=11)
     plt.xlabel('Injection Rate', fontsize=11)
     plt.xlim([xmin, xmax])
-    plt.ylim([0, (meanLatenciesPacket[-1] + 4 * stdLatenciesPacket[-1])])
+    plt.ylim([0, (mean_latencies_packet[-1] + 4 * std_latencies_packet[-1])])
+
     linestyle = {'linestyle': '--', 'linewidth': 1, 'markeredgewidth': 1,
                  'elinewidth': 1, 'capsize': 10}
-    plt.errorbar(injectionRates, meanLatenciesFlit,
+
+    plt.errorbar(inj_rates, mean_latencies_flit,
                  color='r', **linestyle, marker='*')
-    plt.errorbar(injectionRates, meanLatenciesNetwork,
-                 yerr=stdLatenciesNetwork, color='b', **linestyle,
-                 marker='s')
-    plt.errorbar(injectionRates, meanLatenciesPacket, yerr=stdLatenciesPacket,
+    plt.errorbar(inj_rates, mean_latencies_network, yerr=std_latencies_network,
+                 color='b', **linestyle, marker='s')
+    plt.errorbar(inj_rates, mean_latencies_packet, yerr=std_latencies_packet,
                  color='g', **linestyle, marker='^')
 
     plt.legend(['Flit', 'Network', 'Packet'])
