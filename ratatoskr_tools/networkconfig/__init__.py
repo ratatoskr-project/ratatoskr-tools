@@ -19,6 +19,8 @@ def create_xml(config_file='config.ini', config_xml='config.xml', network_xml='n
     writer = writers.NetworkWriter(config)
     writer.write_network(network_xml)
 
+    return config
+
 
 def write_config_file(config, configFileSrc, configFileDst, injectionRate):
     """
