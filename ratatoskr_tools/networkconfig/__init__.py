@@ -1,5 +1,4 @@
 import xml.etree.ElementTree as ET
-import csv
 from . import configure
 from . import xml_writers as writers
 
@@ -58,4 +57,3 @@ def write_config_file(config, configFileSrc, configFileDst, injectionRate):
                 config.runStart + config.runDuration))
             elem.find('injectionRate').set('value', str(injectionRate))
     configTree.write(configFileDst)
-
