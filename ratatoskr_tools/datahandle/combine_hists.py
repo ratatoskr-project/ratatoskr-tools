@@ -27,6 +27,7 @@ import pandas as pd
 import numpy as np
 ###############################################################################
 
+
 def get_latencies(latencies_results_file):
     """
     Read the resulting latencies from the csv file.
@@ -52,8 +53,7 @@ def get_latencies(latencies_results_file):
     return(latencies)
 
 
-
-def combine_VC_hists(directory):
+def combine_vc_hists(directory):
     """
     Combine the VC histograms from csv files.
 
@@ -139,7 +139,7 @@ def init_data_structure():
 ###############################################################################
 
 
-def combine_Buff_hists(directory):
+def combine_buff_hists(directory):
     """
         Combine the Buffer histograms from csv files.
 
@@ -215,5 +215,5 @@ if __name__ == '__main__':
     except Exception:
         print('Please enter the directory path.')
     else:
-        combine_VC_hists(VC_dir)
-        combine_Buff_hists(Buff_dir)
+        combine_vc_hists(VC_dir)
+        combine_buff_hists(Buff_dir)

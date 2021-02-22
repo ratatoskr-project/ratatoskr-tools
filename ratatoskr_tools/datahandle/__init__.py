@@ -7,7 +7,7 @@ def retrieve_vc_usages(simdirs):
     VCUsage_inj = [pd.DataFrame() for i in range(3)]
 
     for simdir in simdirs:
-        VCUsage_run = combine_VC_hists(simdir + "/VCUsage")
+        VCUsage_run = combine_vc_hists(simdir + "/VCUsage")
 
         if VCUsage_run is not None:
             for ix, layer_df in enumerate(VCUsage_run):
@@ -27,11 +27,12 @@ def retrieve_buff_usages(simdirs):
     BuffUsage_inj = init_data_structure()
 
     for simdir in simdirs:
-        BuffUsage_run = combine_Buff_hists(simdir + "/BuffUsage")
+        BuffUsage_run = combine_buff_hists(simdir + "/BuffUsage")
         if BuffUsage_run is not None:
             for l in BuffUsage_inj:
                 for d in BuffUsage_inj[l]:
-                    BuffUsage_inj[l][d] = BuffUsage_inj[l][d].add(BuffUsage_run[l][d], fill_value=0)
+                    BuffUsage_inj[l][d] = BuffUsage_inj[l][d].add(
+                        BuffUsage_run[l][d], fill_value=0)
 
     # Average the buffer usage over restarts.
     BuffUsage_temp = init_data_structure()  # a dict of dicts
@@ -54,4 +55,3 @@ def retrieve_diff_latencies(simdirs):
         latencyNetworks[idx] = lat[2]
 
     return latencyFlits, latencyPackets, latencyNetworks
-
