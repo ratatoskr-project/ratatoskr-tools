@@ -6,7 +6,7 @@ all: clean create_venv jupyter_spellcheck nosetest_results.txt
 
 create_venv: ${venvdir}
 
-${venvdir}: requirements.txt graiSync_package
+${venvdir}: requirements.txt
 	# test -d ${venvdir} || python3.8 -m venv ${venvdir}
 	test -d ${venvdir} || python3 -m venv ${venvdir}
 	${venvdir}/bin/pip install  --upgrade pip
@@ -33,7 +33,7 @@ clean:
 	find . -name 'source_me.sh' -delete
 	find . -name 'nosetest_results.txt' -delete
 
-# Perform automatic test on the Python after buiduing it
+# Perform automatic test on the Python after building it
 nosetest_results.txt: ${venvdir} test test/*
 	. ${venvdir}/bin/activate && nosetests -s > $@  2>&1 || rm -f $@
 
