@@ -3,7 +3,7 @@ import pandas as pd
 import csv
 
 
-def process_VCUsage(simdirs):
+def retrieve_vc_usages(simdirs):
 
     VCUsage_inj = [pd.DataFrame() for i in range(3)]
 
@@ -23,7 +23,7 @@ def process_VCUsage(simdirs):
     return VCUsage_temp
 
 
-def process_BuffUsage(simdirs):
+def retrieve_buff_usages(simdirs):
 
     BuffUsage_inj = init_data_structure()
 
@@ -69,7 +69,7 @@ def get_latencies(latencies_results_file):
     return(latencies)
 
 
-def process_diff_latencies(simdirs):
+def retrieve_diff_latencies(simdirs):
 
     latencyFlits = -np.ones(len(simdirs))
     latencyPackets = -np.ones(len(simdirs))
