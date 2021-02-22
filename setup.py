@@ -10,9 +10,7 @@ setup(
     url='',
     license='MIT',
     packages=find_packages(exclude=['docs*', 'tests*']),
-    data_files={
-        'config': ['./networkconfig/config.ini']
-    },
+
     entry_points={
         'console_scripts': ['']
     },
