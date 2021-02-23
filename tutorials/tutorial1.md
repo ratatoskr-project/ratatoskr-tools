@@ -7,11 +7,11 @@ This is an tutorial that teaches the user how to use the provided API.
 
 ## Prerequisite
 
-Before this tutorial, it is required to compile retrieve the execution simulator file "./sim" from the ratatoskr/simulator repository.
+Before this tutorial, it is required to compile and retrieve the execution simulator program "./sim" from the ratatoskr/simulator repository.
 
 ## Network configuration
 
-Let's start with the network configuration. First, we create a config.ini file, which is a file to make up your simulation settings. In default, you will do a 4x4 Mesh simulation. You can change the settings yourself freely.
+Let's start with the network configuration. First, we create a config.ini file, which is a file to make up your simulation settings. In default, you will do a 4x4 Mesh simulation. You can change the settings in the config.ini file yourself freely.
 
 Here, we create the config.ini file in the directory ./example/
 
@@ -63,7 +63,7 @@ fig_network = rtnplt.plot_static("./example/network.xml", "./example/config.ini"
 
 
     
-![png](readme_files/readme_11_0.png)
+![png](tutorial1_files/tutorial1_11_0.png)
     
 
 
@@ -141,7 +141,7 @@ fig_latencies = rtdplt.plot_latencies(inj_rates, lats_flit, lats_network, lats_p
 
 
     
-![png](readme_files/readme_21_0.png)
+![png](tutorial1_files/tutorial1_21_0.png)
     
 
 
