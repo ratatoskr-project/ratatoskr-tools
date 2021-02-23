@@ -14,4 +14,4 @@
 > $ python setup.py install
 
 ## API Tutorials
-- [tutorial1] (./tutorials/tutorial1.md)
+- [tutorial1](./tutorials/tutorial1.md)
