@@ -1,9 +1,6 @@
-# Introduction to the API of ratatoskr-tools
+# Tutorial 1
 
-ratatoskr-tools is an API that helps the user to automate the simulation of ratatoskr simulator.
-
-
-This is an tutorial that teaches the user how to use the provided API.
+Welcome to the tutorial 1 of the ratatoskr-tools. In this section, you will get the general idea of how the simulation workflow of ratatoskr is.
 
 ## Prerequisite
 
@@ -23,10 +20,8 @@ rtcfg.create_config_ini("./example/config.ini")
 ```
 
 After the config.ini file has been created, we need to convert it into the format ("config.xml" and "network.xml") which the simulator can accept it.
-
-"config.xml" file contains the general information for the simulator, such as the injection rate of the flits, simulation time, etc.
-
-"network.xml" file contains the information regarding the connections between each router in the NoC.
+- "config.xml" file contains the general information for the simulator, such as the injection rate of the flits, simulation time, etc.
+- "network.xml" file contains the information regarding the connections between each router in the NoC.
 
 The configuration settings can be stored in the variable "config" which will be used later on.
 
@@ -36,23 +31,9 @@ config = rtcfg.create_configuration("./example/config.ini", "./example/config.xm
 ```
 
 ## Network plot
-After the configuration, you can see connection of your NoC through the following function. 
+After the configuration, you can see the connection of your NoC through the following function. Through different given arguments, you can output the connection image into a file or let it shows during the program (it is recommended to set plt_show to False during automation).
 
-You can output the plotted network to a PNG file by giving the arguments too.
-
-
-```python
-output_file = "./example/plot.png"
-```
-
-However, in this tutorial the plot is showed through the argument (during the automation it is better to turn it off):
-
-
-```python
-plt_show=True
-```
-
-We will store the image in the variable "fig_network" which will be used later on.
+The generated image is stored in the variable "fig_network" which will be used later on.
 
 
 ```python
@@ -63,7 +44,7 @@ fig_network = rtnplt.plot_static("./example/network.xml", "./example/config.ini"
 
 
     
-![png](tutorial1_files/tutorial1_11_0.png)
+![png](tutorial1_files/tutorial1_7_0.png)
     
 
 
@@ -141,7 +122,7 @@ fig_latencies = rtdplt.plot_latencies(inj_rates, lats_flit, lats_network, lats_p
 
 
     
-![png](tutorial1_files/tutorial1_21_0.png)
+![png](tutorial1_files/tutorial1_17_0.png)
     
 
 
