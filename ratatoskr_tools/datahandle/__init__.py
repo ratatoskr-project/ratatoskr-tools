@@ -73,7 +73,8 @@ def retrieve_buff_usages(simdirs):
 
 def retrieve_diff_latencies(simdirs):
     """
-    Retrieve all kinds of latencies (flit, packet, network) simulation result from the dummy simulation directories.
+    Retrieve all kinds of latencies (flit, packet, network) simulation result
+    from the dummy simulation directories.
 
     Parameters
     ----------

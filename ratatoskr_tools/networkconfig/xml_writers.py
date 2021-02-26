@@ -56,20 +56,21 @@ class DataWriter(Writer):
             - data_types: a list of data types
         """
         dataTypes_node = ET.SubElement(self.root_node, 'dataTypes')
-        for i in range(0, len(data_types)):
-            self.add_dataType_node(dataTypes_node, i, data_types[i])
 
-    def add_dataType_node(self, parent_node, id, value):
+        for idx, data_type in enumerate(data_types):
+            self.add_dataType_node(dataTypes_node, idx, data_type)
+
+    def add_dataType_node(self, parent_node, id_, value):
         """
         Individual DataType
 
         Parameters:
             - parent_node: the parent node
-            - id: the id of the added data type
+            - id_: the id of the added data type
             - value: the value of the data type
         """
         dataType_node = ET.SubElement(parent_node, 'dataType')
-        dataType_node.set('id', str(id))
+        dataType_node.set('id', str(id_))
 
         name_node = ET.SubElement(dataType_node, 'name')
         name_node.set('value', str(value))
@@ -122,14 +123,14 @@ class DataWriter(Writer):
         generates_node = ET.SubElement(parent_node, 'generates')
         return generates_node
 
-    def add_possibility(self, parent_node, id, prob, delay, interval, count,
+    def add_possibility(self, parent_node, id_, prob, delay, interval, count,
                         dt_ix, dist_tasks):
         """
         Adding a possibility
 
         Parameters:
             - parent_node: the parent node
-            - id: the id of the possibility
+            - id_: the id of the possibility
             - prob: the probability of the possibility
             - delay: the delay time before a task starts sending the data
             - interval: the interval (clock cycle)
@@ -138,7 +139,7 @@ class DataWriter(Writer):
             - dist_tasks: a list of destination tasks
         """
         possibility_node = ET.SubElement(parent_node, 'possibility')
-        possibility_node.set('id', str(id))
+        possibility_node.set('id', str(id_))
 
         probability_node = ET.SubElement(possibility_node, 'probability')
         probability_node.set('value', str(prob))
@@ -162,19 +163,19 @@ class DataWriter(Writer):
         requires_node = ET.SubElement(parent_node, 'requires')
         return requires_node
 
-    def add_requirement(self, parent_node, id, type, source, count):
+    def add_requirement(self, parent_node, id_, type, source, count):
         """
         Adding a requirement node
 
         Parameters:
             - parent_node: the parent node
-            - id: the id of the requirment
+            - id_: the id of the requirment
             - type: the id of the data type
             - source: the id of the source task
             - count: the number of the required packets from the source task
         """
         requirement_node = ET.SubElement(parent_node, 'requirement')
-        requirement_node.set('id', str(id))
+        requirement_node.set('id', str(id_))
 
         d_type_node = ET.SubElement(requirement_node, 'type')
         d_type_node.set('value', str(type))
@@ -186,14 +187,14 @@ class DataWriter(Writer):
         count_node.set('min', str(count))
         count_node.set('max', str(count))
 
-    def add_destination(self, parent_node, id, delay, interval, count, dt_ix,
+    def add_destination(self, parent_node, id_, delay, interval, count, dt_ix,
                         dist_task):
         """
         Adding a destination to a possibility
 
         Parameters:
             - parent_node: the parent node
-            - id: the id of the destination
+            - id_: the id of the destination
             - delay: the delay time before a task starts sending the data
             - interval: the interval (clock cycle)
             - count: the number of packets to send
@@ -201,7 +202,7 @@ class DataWriter(Writer):
             - dist_tasks: a list of destination tasks
         """
         destination_node = ET.SubElement(parent_node, 'destination')
-        destination_node.set('id', str(id))
+        destination_node.set('id', str(id_))
 
         delay_node = ET.SubElement(destination_node, 'delay')
         delay_node.set('min', str(delay[0]))
@@ -459,13 +460,13 @@ class NetworkWriter(Writer):
                         x_index = -1
                         y_finder = np.where(self.y_range[z - 1] == yi)
                         y_index = -1
-                        if (len(x_finder[0]) != 0):
+                        if len(x_finder[0]) != 0:
                             x_index = x_finder[0][0]
-                        if (len(y_finder[0]) != 0):
+                        if len(y_finder[0]) != 0:
                             y_index = y_finder[0][0]
                         if (x_index != -1 and y_index != -1):
                             previous_node_count = 0
-                            if (z > 1):
+                            if z > 1:
                                 previous_node_count = sum(
                                     nodecounts[0: int(z) - 1])
                             dst_id = previous_node_count + y_index * \
@@ -483,9 +484,9 @@ class NetworkWriter(Writer):
                         x_index = -1
                         y_finder = np.where(self.y_range[z + 1] == yi)
                         y_index = -1
-                        if (len(x_finder[0]) != 0):
+                        if len(x_finder[0]) != 0:
                             x_index = x_finder[0][0]
-                        if (len(y_finder[0]) != 0):
+                        if len(y_finder[0]) != 0:
                             y_index = y_finder[0][0]
                         if (x_index != -1 and y_index != -1):
                             previous_node_count = sum(
@@ -504,7 +505,8 @@ class NetworkWriter(Writer):
 
     def write_torus_connections(self):
         assert self.config.z == 1, "Not supported 3D Torus"
-        assert self.config.y[0] > 1 and self.config.x[0] > 1, "The value of y[0] and x[0] should larger than 0 for 2D Torus"
+        assert self.config.y[0] > 1 and self.config.x[0] > 1, \
+            "The value of y[0] and x[0] should larger than 0 for 2D Torus"
 
         connections_node = ET.SubElement(self.root_node, 'connections')
         con_id = 0
@@ -553,8 +555,10 @@ class NetworkWriter(Writer):
                 connections_node, con_id, connection_tuple[1], connection_tuple[0])
 
     def write_ring_connections(self):
-        assert self.config.z == 1 and self.config.y[0] == 1, "Ring topology, z and y[0] must be 1"
-        assert self.config.x[0] > 1, "Ring topology, x[0] should larger than 1"
+        assert self.config.z == 1 and self.config.y[0] == 1, \
+            "Ring topology, z and y[0] must be 1"
+        assert self.config.x[0] > 1, \
+            "Ring topology, x[0] should larger than 1"
 
         connections_node = ET.SubElement(self.root_node, 'connections')
         con_id = 0
@@ -586,11 +590,11 @@ class NetworkWriter(Writer):
         self.write_nodes(nodes_node, 'Router')
         self.write_nodes(nodes_node, 'ProcessingElement')
 
-        if (self.config.topology == "mesh"):
+        if self.config.topology == "mesh":
             self.write_mesh_connections()
-        elif (self.config.topology == "torus"):
+        elif self.config.topology == "torus":
             self.write_torus_connections()
-        elif (self.config.topology == "ring"):
+        elif self.config.topology == "ring":
             self.write_ring_connections()
 
         self.write_file(file_name)

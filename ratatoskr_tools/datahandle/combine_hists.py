@@ -50,7 +50,7 @@ def get_latencies(latencies_results_file):
         latencies.append(-1)
         latencies.append(-1)
 
-    return(latencies)
+    return latencies
 
 
 def combine_vc_hists(directory):
@@ -89,12 +89,12 @@ def combine_vc_hists(directory):
             df.index.name = 'Number of VCs'
 
         return data
-    else:
-        return None
+
+    return None
 ###############################################################################
 
 
-def read_dataframe(layers, path, layer, dir):
+def read_dataframe(layers, path, layer, directory):
     """
     Read a data frame from csv file then accumulate the data.
 
@@ -103,15 +103,19 @@ def read_dataframe(layers, path, layer, dir):
         needs to bee updated.
         - path: the path of the csv file to be read.
         - layer: the key of outmost dictionary layers.
-        - dir: the key of innermost dictionary layers[layer]
+        - directory: the key of innermost dictionary layers[layer]
 
     Return:
-       - The updated data structure layers.
+       - The updated data structure layers,
+         or None if the csv file not exists.
     """
     temp = pd.read_csv(path, index_col=0)
     if not temp.empty:
-        layers[layer][dir] = layers[layer][dir].add(temp, fill_value=0)
+        layers[layer][directory] = layers[layer][directory].add(
+            temp, fill_value=0)
         return layers
+
+    return None
 ###############################################################################
 
 
@@ -202,12 +206,11 @@ def combine_buff_hists(directory):
                 layers[l][d] = np.ceil(layers[l][d] / 4)
 
         return layers
-    else:
-        return None
+
+    return None
 ###############################################################################
 
 
-""" Main point of execution """
 if __name__ == '__main__':
     try:
         VC_dir = sys.argv[1]
