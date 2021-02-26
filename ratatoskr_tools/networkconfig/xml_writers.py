@@ -372,7 +372,7 @@ class NetworkWriter(Writer):
         vcCount_node.set('value', str(self.config.vcCount))
 
     def make_con(self, connections_node, con_id, src_node, dst_node):
-        #print("binding " + str(src_node) + " to " + str(dst_node))
+        # print("binding " + str(src_node) + " to " + str(dst_node))
         dupCon = self.is_duplicate_con(connections_node, src_node, dst_node)
         if not dupCon:
             self.construct_con(connections_node, con_id, src_node, dst_node)
@@ -397,8 +397,8 @@ class NetworkWriter(Writer):
     def construct_con(self, connections_node, con_id, src_node, dst_node):
         con_node = ET.SubElement(connections_node, 'con')
         con_node.set('id', str(con_id))
-        #interface_node = ET.SubElement(con_node, 'interface')
-        #interface_node.set('value', str(0))
+        # interface_node = ET.SubElement(con_node, 'interface')
+        # interface_node.set('value', str(0))
         ports_node = ET.SubElement(con_node, 'ports')
         self.make_port(ports_node, 0, src_node)
         self.make_port(ports_node, 1, dst_node)
@@ -406,102 +406,69 @@ class NetworkWriter(Writer):
     def write_mesh_connections(self):
         connections_node = ET.SubElement(self.root_node, 'connections')
         con_id = 0
-        node_id = 0
-        z = 0
-        nodecounts = []
-        for (x, y) in zip(self.config.x, self.config.y):
-            nodecounts.append(x*y)
-        nodecount = sum(nodecounts)
         already_connected = set()
 
-        for zi in self.z_range:
-            for yi in self.y_range[z]:
-                for xi in self.x_range[z]:
-                    # create Local
-                    #print("connecting local from " + str(node_id) + " to " + str(node_id + nodecount))
-                    connection_tuple = (
-                        min(node_id, node_id + nodecount), max(node_id, node_id + nodecount))
-                    if not connection_tuple in already_connected:
-                        con_id = self.make_con(
-                            connections_node, con_id, connection_tuple[1], connection_tuple[0])
-                        already_connected.add(connection_tuple)
-                    if xi > 0:  # create West
-                        connection_tuple = (node_id - 1, node_id)
-                        if not connection_tuple in already_connected:
-                            con_id = self.make_con(
-                                connections_node, con_id, connection_tuple[1], connection_tuple[0])
-                            already_connected.add(connection_tuple)
-                        #con_id = self.make_con(connections_node, con_id, node_id, node_id-1)
-                    if xi < 0.95:  # create East
-                        connection_tuple = (node_id, node_id + 1)
-                        if not connection_tuple in already_connected:
-                            con_id = self.make_con(
-                                connections_node, con_id, connection_tuple[1], connection_tuple[0])
-                            already_connected.add(connection_tuple)
-                        #con_id = self.make_con(connections_node, con_id, node_id, node_id+1)
-                    if yi > 0:  # create South
-                        connection_tuple = (
-                            min(node_id, node_id-self.config.x[z]), max(node_id, node_id-self.config.x[z]))
-                        if not connection_tuple in already_connected:
-                            con_id = self.make_con(
-                                connections_node, con_id, connection_tuple[1], connection_tuple[0])
-                            already_connected.add(connection_tuple)
-                        #con_id = self.make_con(connections_node, con_id, node_id, node_id-self.config.x[z])
-                    if yi < 0.95:  # create North
-                        connection_tuple = (
-                            min(node_id, node_id+self.config.x[z]), max(node_id, node_id+self.config.x[z]))
-                        if not connection_tuple in already_connected:
-                            con_id = self.make_con(
-                                connections_node, con_id, connection_tuple[1], connection_tuple[0])
-                            already_connected.add(connection_tuple)
-                        #con_id = self.make_con(connections_node, con_id, node_id, node_id+self.config.x[z])
-                    if zi > 0:  # create Down
-                        x_finder = np.where(self.x_range[z - 1] == xi)
-                        x_index = -1
-                        y_finder = np.where(self.y_range[z - 1] == yi)
-                        y_index = -1
-                        if len(x_finder[0]) != 0:
-                            x_index = x_finder[0][0]
-                        if len(y_finder[0]) != 0:
-                            y_index = y_finder[0][0]
-                        if (x_index != -1 and y_index != -1):
-                            previous_node_count = 0
-                            if z > 1:
-                                previous_node_count = sum(
-                                    nodecounts[0: int(z) - 1])
-                            dst_id = previous_node_count + y_index * \
-                                self.config.x[z - 1] + x_index
-                            #print("connecting " + str(node_id) + " with " + str(dst_id))
-                            connection_tuple = (
-                                min(node_id, dst_id), max(node_id, dst_id))
-                            if not connection_tuple in already_connected:
-                                con_id = self.make_con(
-                                    connections_node, con_id, connection_tuple[1], connection_tuple[0])
-                                already_connected.add(connection_tuple)
-                            #con_id = self.make_con(connections_node, con_id, node_id, dst_id)
-                    if (zi < 0.95) and (self.config.z > 1):  # create Up
-                        x_finder = np.where(self.x_range[z + 1] == xi)
-                        x_index = -1
-                        y_finder = np.where(self.y_range[z + 1] == yi)
-                        y_index = -1
-                        if len(x_finder[0]) != 0:
-                            x_index = x_finder[0][0]
-                        if len(y_finder[0]) != 0:
-                            y_index = y_finder[0][0]
-                        if (x_index != -1 and y_index != -1):
-                            previous_node_count = sum(
-                                nodecounts[0: int(z) + 1])
-                            dst_id = previous_node_count + y_index * \
-                                self.config.x[z + 1] + x_index
-                            connection_tuple = (
-                                min(node_id, dst_id), max(node_id, dst_id))
-                            if not connection_tuple in already_connected:
-                                con_id = self.make_con(
-                                    connections_node, con_id, connection_tuple[1], connection_tuple[0])
-                                already_connected.add(connection_tuple)
-                            #con_id = self.make_con(connections_node, con_id, node_id, dst_id)
-                    node_id += 1
-            z += 1
+        nodecount = sum([x*y for (x, y) in zip(self.config.x, self.config.y)])
+
+        # create mapping id of each node and their coordinate
+        id_to_norm_coord = {}
+        norm_coord_to_id = {}
+        id_to_coord = {}
+        coord_to_id = {}
+        id_ = 0
+        for z_itr, z in enumerate(self.z_range):
+            for y_itr, y in enumerate(self.y_range[z_itr]):
+                for x_itr, x in enumerate(self.x_range[z_itr]):
+                    id_to_norm_coord[id_] = (x, y, z)
+                    norm_coord_to_id[(x, y, z)] = id_
+                    id_to_coord[id_] = (x_itr, y_itr, z_itr)
+                    coord_to_id[(x_itr, y_itr, z_itr)] = id_
+                    id_ += 1
+
+        # connection of core and router
+        for nid in range(nodecount):
+            connection_tuple = (nid, nid + nodecount)
+            already_connected.add(connection_tuple)
+
+        # connection of x-axis
+        for nid in range(nodecount):
+            source_coord = id_to_coord[nid]
+            target_coord = (source_coord[0] + 1,
+                            source_coord[1], source_coord[2])
+            if target_coord not in coord_to_id:
+                continue
+            target_id = coord_to_id[target_coord]
+            connection_tuple = (min(nid, target_id), max(nid, target_id))
+            already_connected.add(connection_tuple)
+
+        # connection of y-axis
+        for nid in range(nodecount):
+            source_coord = id_to_coord[nid]
+            target_coord = (source_coord[0],
+                            source_coord[1] + 1, source_coord[2])
+            if target_coord not in coord_to_id:
+                continue
+            target_id = coord_to_id[target_coord]
+            connection_tuple = (min(nid, target_id), max(nid, target_id))
+            already_connected.add(connection_tuple)
+
+        # connection of z-axis
+        for nid in range(nodecount):
+            source_coord = id_to_norm_coord[nid]
+            target_z = source_coord[2] + self.z_step
+            if target_z > self.z_range[-1]:
+                continue
+            target_coord = (source_coord[0], source_coord[1], target_z)
+            if target_coord not in norm_coord_to_id:
+                continue
+            target_id = norm_coord_to_id[target_coord]
+            connection_tuple = (min(nid, target_id), max(nid, target_id))
+            already_connected.add(connection_tuple)
+
+        # assign all calculated connection_tuple
+        for connection_tuple in already_connected:
+            con_id = self.make_con(
+                connections_node, con_id, connection_tuple[1], connection_tuple[0])
 
     def write_torus_connections(self):
         assert self.config.z == 1, "Not supported 3D Torus"
