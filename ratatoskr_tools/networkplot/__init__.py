@@ -43,9 +43,9 @@ def plot_static(network_xml, config_file, output_file=None, plt_show=False):
     return plot_network.fig
 
 
-def plot_dynamic(network_xml, config_file):
+def plot_dynamic(network_xml, config_file, host="localhost", port=5555, max_request=2000000):
     """
-    Plot the dynamic network which connect to the GUI server of ./sim
+    Plot the dynamic network which connect to the GUI server of the ratatoskr simulator.
 
     Parameters
     ----------
@@ -53,6 +53,12 @@ def plot_dynamic(network_xml, config_file):
         Path of network.xml file
     config_file : str
         Path of config.ini file
+    host : str, optional
+        tcp server host ip, by default "localhost"
+    port : int, optional
+        tcp port number, by default 5555
+    max_request : int, optional
+        maximum request count to the server, by default 2000000
     """
 
     plot_network.init_script(network_xml, config_file)
@@ -68,10 +74,10 @@ def plot_dynamic(network_xml, config_file):
 
     print("Connecting to simulator server")
     socket = context.socket(zmq.REQ)
-    socket.connect("tcp://localhost:5555")
+    socket.connect("tcp://{}:{}".format(host, port))
 
-    for request in range(2000000):
-        socket.send_string("Hello")
+    for request in range(max_request):
+        socket.send_string("Cient request {}".format(request))
         message = socket.recv()
 
         data = json.loads(message)
@@ -88,7 +94,7 @@ def plot_dynamic(network_xml, config_file):
         plot_network.colorize_nodes(avg_router_load)
         time_stamp.remove()
 
-        time_stamp_val = "Time: " + str(time/1000) + " ns"
+        time_stamp_val = "Time: {} ns".format(time/1000)
         time_stamp = plot_network.ax.text(
             0, 1, 1, time_stamp_val, size=12, color='red')
 
