@@ -13,4 +13,5 @@ ratatoskr-tools is an API that helps the user to automate the simulation of rata
 > $ python setup.py install
 
 ## API Tutorials
-- [tutorial1](./tutorials/tutorial1.md)
+- [tutorial 1: Overall simulation](./tutorials/tutorial1.md)
+- [tutorial 2: ratatoskr GUI client](./tutorials/tutorial2.md)
