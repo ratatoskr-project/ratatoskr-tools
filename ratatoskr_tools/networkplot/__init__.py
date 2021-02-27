@@ -67,6 +67,10 @@ def plot_dynamic(network_xml, config_file, host="localhost", port=5555, max_requ
 
     plot_network.colorize_nodes(range(len(plot_network.points)))
 
+    xlim = plot_network.ax.get_xlim3d()
+    ylim = plot_network.ax.get_ylim3d()
+    zlim = plot_network.ax.get_zlim3d()
+
     time_stamp = plot_network.ax.text(2, 2, 2, 0, size=12, color='red')
     avg_router_load = [0] * len(plot_network.points)
 
@@ -96,7 +100,7 @@ def plot_dynamic(network_xml, config_file, host="localhost", port=5555, max_requ
 
         time_stamp_val = "Time: {} ns".format(time/1000)
         time_stamp = plot_network.ax.text(
-            0, 1, 1, time_stamp_val, size=12, color='red')
+            xlim[0], ylim[-1], zlim[-1], time_stamp_val, size=12, color='red')
 
         plot_network.plt.pause(1/30)
 
