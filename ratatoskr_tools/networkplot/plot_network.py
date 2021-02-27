@@ -216,6 +216,22 @@ def annotate_points():
         ax.text(x, y, z, idx, size=10, color='red')
 
 
+def colorize_nodes(colorValues):
+    """
+    Annotating the points using their index
+    """
+    points_coordinates = []
+    for p in points:
+        points_coordinates.append(p[0])
+    points_coordinates = np.array(points_coordinates)
+    xs = points_coordinates[:, 0]
+    ys = points_coordinates[:, 1]
+    zs = points_coordinates[:, 2]
+    global routerHeat
+    routerHeat = ax.scatter(xs, ys, zs, c=colorValues,
+                            cmap='inferno', s=200)  # , marker=m)
+
+
 ###############################################################################
 # PLOT SURFACES
 ###############################################################################
