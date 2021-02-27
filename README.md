@@ -7,6 +7,7 @@ ratatoskr-tools is an API that helps the user to automate the simulation of rata
 
 2. Create virtual environment to install this package in it and activate the virtual environment. The provided Makefile has provided the packages for the virtual envoronment. If you want to install in your machine locally, then skip this step.
 > $ make
+
 > $ source source_me.sh
 
 3. Install this package to your current working environment. (If your environment exists python and python3 then use python3 instead of python).
