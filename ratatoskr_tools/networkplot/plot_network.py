@@ -216,7 +216,7 @@ def annotate_points():
         ax.text(x, y, z, idx, size=10, color='red')
 
 
-def colorize_nodes(colorValues):
+def colorize_nodes(color_values):
     """
     Annotating the points using their index
     """
@@ -228,7 +228,7 @@ def colorize_nodes(colorValues):
     ys = points_coordinates[:, 1]
     zs = points_coordinates[:, 2]
     global router_heat
-    router_heat = ax.scatter(xs, ys, zs, c=colorValues,
+    router_heat = ax.scatter(xs, ys, zs, c=color_values,
                              cmap='inferno', s=200)  # , marker=m)
 
 
