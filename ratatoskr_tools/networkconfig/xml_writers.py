@@ -471,27 +471,31 @@ class NetworkWriter(Writer):
                 connections_node, con_id, connection_tuple[1], connection_tuple[0])
 
     def write_torus_connections(self):
-        assert self.config.z == 1, "Not supported 3D Torus"
-        assert self.config.y[0] > 1 and self.config.x[0] > 1, \
-            "The value of y[0] and x[0] should larger than 0 for 2D Torus"
+        for itr, (x, y) in enumerate(zip(self.config.x, self.config.y)):
+            assert x and y, \
+                "The value of y and x at layer {} should larger than 1 for Torus".format(
+                    itr)
 
         connections_node = ET.SubElement(self.root_node, 'connections')
         con_id = 0
         already_connected = set()
 
-        x_len = self.config.x[0]
-        y_len = self.config.y[0]
-        nodecount = x_len * y_len
+        nodecount = sum([x*y for (x, y) in zip(self.config.x, self.config.y)])
 
-        # create mapping node id and its coordinate
-        coord_to_nid = {}
-        nid_to_coord = {}
-        nid = 0
-        for y in range(y_len):
-            for x in range(x_len):
-                nid_to_coord[nid] = (x, y)
-                coord_to_nid[(x, y)] = nid
-                nid += 1
+        # create mapping id of each node and their coordinate
+        id_to_norm_coord = {}
+        norm_coord_to_id = {}
+        id_to_coord = {}
+        coord_to_id = {}
+        id_ = 0
+        for z_itr, z in enumerate(self.z_range):
+            for y_itr, y in enumerate(self.y_range[z_itr]):
+                for x_itr, x in enumerate(self.x_range[z_itr]):
+                    id_to_norm_coord[id_] = (x, y, z)
+                    norm_coord_to_id[(x, y, z)] = id_
+                    id_to_coord[id_] = (x_itr, y_itr, z_itr)
+                    coord_to_id[(x_itr, y_itr, z_itr)] = id_
+                    id_ += 1
 
         # connection of core and router
         for nid in range(nodecount):
@@ -500,21 +504,44 @@ class NetworkWriter(Writer):
 
         # connection of x-axis (west and east, direction is west to east)
         for nid in range(nodecount):
-            coord = nid_to_coord[nid]
-            x = (coord[0] + 1) % x_len
-            y = coord[1]
-            target_nid = coord_to_nid[(x, y)]
-            connection_tuple = (min(nid, target_nid), max(nid, target_nid))
+            source_coord = id_to_coord[nid]
+            x = (source_coord[0] + 1) % self.config.x[source_coord[2]]
+            target_id = coord_to_id[(x, source_coord[1], source_coord[2])]
+            connection_tuple = (min(nid, target_id), max(nid, target_id))
             already_connected.add(connection_tuple)
 
         # connection of y-axis (south and north, direction is south to north)
         for nid in range(nodecount):
-            coord = nid_to_coord[nid]
-            x = coord[0]
-            y = (coord[1] + 1) % y_len
-            target_nid = coord_to_nid[(x, y)]
-            connection_tuple = (min(nid, target_nid), max(nid, target_nid))
+            source_coord = id_to_coord[nid]
+            y = (source_coord[1] + 1) % self.config.y[source_coord[2]]
+            target_id = coord_to_id[(source_coord[0], y, source_coord[2])]
+            connection_tuple = (min(nid, target_id), max(nid, target_id))
             already_connected.add(connection_tuple)
+
+        # connection of z-axis
+        for nid in range(nodecount):
+            source_coord = id_to_norm_coord[nid]
+            target_z = source_coord[2] + self.z_step
+            if target_z > self.z_range[-1]:
+                continue
+            target_coord = (source_coord[0], source_coord[1], target_z)
+            if target_coord not in norm_coord_to_id:
+                continue
+            target_id = norm_coord_to_id[target_coord]
+            connection_tuple = (min(nid, target_id), max(nid, target_id))
+            already_connected.add(connection_tuple)
+
+        if len(self.z_range) > 2:
+            for norm_x in self.x_range[0]:
+                for norm_y in self.y_range[0]:
+                    source_coord = (norm_x, norm_y, 0.)
+                    target_coord = (norm_x, norm_y, 1.)
+                    if target_coord not in norm_coord_to_id:
+                        continue
+                    source_id = norm_coord_to_id[source_coord]
+                    target_id = norm_coord_to_id[target_coord]
+                    connection_tuple = (source_id, target_id)
+                    already_connected.add(connection_tuple)
 
         # assign all calculated connection_tuple
         for connection_tuple in already_connected:
