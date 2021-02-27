@@ -62,7 +62,6 @@ def plot_dynamic(network_xml, config_file):
     for request in range(2000000):
         socket.send_string("Hello")
         message = socket.recv()
-        print("there")
 
         data = json.loads(message)
         time = float(data["Time"]["time"])
