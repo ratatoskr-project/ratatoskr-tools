@@ -5,7 +5,8 @@ from . import plot_network
 
 
 def plot_static(network_xml, config_file, output_file=None, plt_show=False):
-    """[summary]
+    """
+    Plot the static network.
 
     Parameters
     ----------
@@ -43,6 +44,16 @@ def plot_static(network_xml, config_file, output_file=None, plt_show=False):
 
 
 def plot_dynamic(network_xml, config_file):
+    """
+    Plot the dynamic network which connect to the GUI server of ./sim
+
+    Parameters
+    ----------
+    network_xml : str
+        Path of network.xml file
+    config_file : str
+        Path of config.ini file
+    """
 
     plot_network.init_script(network_xml, config_file)
     plot_network.create_fig()
@@ -65,12 +76,10 @@ def plot_dynamic(network_xml, config_file):
 
         data = json.loads(message)
         time = float(data["Time"]["time"])
-        current_load = []
 
         for router_idx in range(len(plot_network.points)):
             current_router_val = float(
                 data["Data"][router_idx]["averagebufferusage"])
-            current_load.append(current_router_val)
             alpha = .01
             avg_router_load[router_idx] = alpha * current_router_val + \
                 (1-alpha) * avg_router_load[router_idx]
