@@ -16,3 +16,7 @@ ratatoskr-tools is an API that helps the user to automate the simulation of rata
 ## API Tutorials
 - [tutorial 1: Overall simulation](./tutorials/tutorial1.md)
 - [tutorial 2: ratatoskr GUI client](./tutorials/tutorial2.md)
+
+
+## License
+This project is licensed under the MIT License - see the [LICENSE](./LICENSE) file for details
