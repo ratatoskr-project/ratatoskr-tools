@@ -284,6 +284,21 @@ class NetworkWriter(Writer):
                 self.y_range.append(
                     np.arange(0, 1+self.y_step[itr]/10, self.y_step[itr]))
 
+        # create mapping id of each node and their coordinate
+        self.id_to_norm_coord = {}
+        self.norm_coord_to_id = {}
+        self.id_to_coord = {}
+        self.coord_to_id = {}
+        id_ = 0
+        for z_itr, z in enumerate(self.z_range):
+            for y_itr, y in enumerate(self.y_range[z_itr]):
+                for x_itr, x in enumerate(self.x_range[z_itr]):
+                    self.id_to_norm_coord[id_] = (x, y, z)
+                    self.norm_coord_to_id[(x, y, z)] = id_
+                    self.id_to_coord[id_] = (x_itr, y_itr, z_itr)
+                    self.coord_to_id[(x_itr, y_itr, z_itr)] = id_
+                    id_ += 1
+
     def write_header(self):
         bufferDepthType_node = ET.SubElement(self.root_node, 'bufferDepthType')
         bufferDepthType_node.set('value', self.config.bufferDepthType)
@@ -410,21 +425,6 @@ class NetworkWriter(Writer):
 
         nodecount = sum([x*y for (x, y) in zip(self.config.x, self.config.y)])
 
-        # create mapping id of each node and their coordinate
-        id_to_norm_coord = {}
-        norm_coord_to_id = {}
-        id_to_coord = {}
-        coord_to_id = {}
-        id_ = 0
-        for z_itr, z in enumerate(self.z_range):
-            for y_itr, y in enumerate(self.y_range[z_itr]):
-                for x_itr, x in enumerate(self.x_range[z_itr]):
-                    id_to_norm_coord[id_] = (x, y, z)
-                    norm_coord_to_id[(x, y, z)] = id_
-                    id_to_coord[id_] = (x_itr, y_itr, z_itr)
-                    coord_to_id[(x_itr, y_itr, z_itr)] = id_
-                    id_ += 1
-
         # connection of core and router
         for nid in range(nodecount):
             connection_tuple = (nid, nid + nodecount)
@@ -432,36 +432,36 @@ class NetworkWriter(Writer):
 
         # connection of x-axis
         for nid in range(nodecount):
-            source_coord = id_to_coord[nid]
+            source_coord = self.id_to_coord[nid]
             target_coord = (source_coord[0] + 1,
                             source_coord[1], source_coord[2])
-            if target_coord not in coord_to_id:
+            if target_coord not in self.coord_to_id:
                 continue
-            target_id = coord_to_id[target_coord]
+            target_id = self.coord_to_id[target_coord]
             connection_tuple = (min(nid, target_id), max(nid, target_id))
             already_connected.add(connection_tuple)
 
         # connection of y-axis
         for nid in range(nodecount):
-            source_coord = id_to_coord[nid]
+            source_coord = self.id_to_coord[nid]
             target_coord = (source_coord[0],
                             source_coord[1] + 1, source_coord[2])
-            if target_coord not in coord_to_id:
+            if target_coord not in self.coord_to_id:
                 continue
-            target_id = coord_to_id[target_coord]
+            target_id = self.coord_to_id[target_coord]
             connection_tuple = (min(nid, target_id), max(nid, target_id))
             already_connected.add(connection_tuple)
 
         # connection of z-axis
         for nid in range(nodecount):
-            source_coord = id_to_norm_coord[nid]
+            source_coord = self.id_to_norm_coord[nid]
             target_z = source_coord[2] + self.z_step
             if target_z > self.z_range[-1]:
                 continue
             target_coord = (source_coord[0], source_coord[1], target_z)
-            if target_coord not in norm_coord_to_id:
+            if target_coord not in self.norm_coord_to_id:
                 continue
-            target_id = norm_coord_to_id[target_coord]
+            target_id = self.norm_coord_to_id[target_coord]
             connection_tuple = (min(nid, target_id), max(nid, target_id))
             already_connected.add(connection_tuple)
 
@@ -482,21 +482,6 @@ class NetworkWriter(Writer):
 
         nodecount = sum([x*y for (x, y) in zip(self.config.x, self.config.y)])
 
-        # create mapping id of each node and their coordinate
-        id_to_norm_coord = {}
-        norm_coord_to_id = {}
-        id_to_coord = {}
-        coord_to_id = {}
-        id_ = 0
-        for z_itr, z in enumerate(self.z_range):
-            for y_itr, y in enumerate(self.y_range[z_itr]):
-                for x_itr, x in enumerate(self.x_range[z_itr]):
-                    id_to_norm_coord[id_] = (x, y, z)
-                    norm_coord_to_id[(x, y, z)] = id_
-                    id_to_coord[id_] = (x_itr, y_itr, z_itr)
-                    coord_to_id[(x_itr, y_itr, z_itr)] = id_
-                    id_ += 1
-
         # connection of core and router
         for nid in range(nodecount):
             connection_tuple = (nid, nid + nodecount)
@@ -504,30 +489,30 @@ class NetworkWriter(Writer):
 
         # connection of x-axis (west and east, direction is west to east)
         for nid in range(nodecount):
-            source_coord = id_to_coord[nid]
+            source_coord = self.id_to_coord[nid]
             x = (source_coord[0] + 1) % self.config.x[source_coord[2]]
-            target_id = coord_to_id[(x, source_coord[1], source_coord[2])]
+            target_id = self.coord_to_id[(x, source_coord[1], source_coord[2])]
             connection_tuple = (min(nid, target_id), max(nid, target_id))
             already_connected.add(connection_tuple)
 
         # connection of y-axis (south and north, direction is south to north)
         for nid in range(nodecount):
-            source_coord = id_to_coord[nid]
+            source_coord = self.id_to_coord[nid]
             y = (source_coord[1] + 1) % self.config.y[source_coord[2]]
-            target_id = coord_to_id[(source_coord[0], y, source_coord[2])]
+            target_id = self.coord_to_id[(source_coord[0], y, source_coord[2])]
             connection_tuple = (min(nid, target_id), max(nid, target_id))
             already_connected.add(connection_tuple)
 
         # connection of z-axis
         for nid in range(nodecount):
-            source_coord = id_to_norm_coord[nid]
+            source_coord = self.id_to_norm_coord[nid]
             target_z = source_coord[2] + self.z_step
             if target_z > self.z_range[-1]:
                 continue
             target_coord = (source_coord[0], source_coord[1], target_z)
-            if target_coord not in norm_coord_to_id:
+            if target_coord not in self.norm_coord_to_id:
                 continue
-            target_id = norm_coord_to_id[target_coord]
+            target_id = self.norm_coord_to_id[target_coord]
             connection_tuple = (min(nid, target_id), max(nid, target_id))
             already_connected.add(connection_tuple)
 
@@ -536,10 +521,10 @@ class NetworkWriter(Writer):
                 for norm_y in self.y_range[0]:
                     source_coord = (norm_x, norm_y, 0.)
                     target_coord = (norm_x, norm_y, 1.)
-                    if target_coord not in norm_coord_to_id:
+                    if target_coord not in self.norm_coord_to_id:
                         continue
-                    source_id = norm_coord_to_id[source_coord]
-                    target_id = norm_coord_to_id[target_coord]
+                    source_id = self.norm_coord_to_id[source_coord]
+                    target_id = self.norm_coord_to_id[target_coord]
                     connection_tuple = (source_id, target_id)
                     already_connected.add(connection_tuple)
 
