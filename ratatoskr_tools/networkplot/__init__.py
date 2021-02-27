@@ -90,7 +90,7 @@ def plot_dynamic(network_xml, config_file, host="localhost", port=5555, max_requ
             avg_router_load[router_idx] = alpha * current_router_val + \
                 (1-alpha) * avg_router_load[router_idx]
 
-        plot_network.routerHeat.remove()
+        plot_network.router_heat.remove()
         plot_network.colorize_nodes(avg_router_load)
         time_stamp.remove()
 

@@ -227,9 +227,9 @@ def colorize_nodes(colorValues):
     xs = points_coordinates[:, 0]
     ys = points_coordinates[:, 1]
     zs = points_coordinates[:, 2]
-    global routerHeat
-    routerHeat = ax.scatter(xs, ys, zs, c=colorValues,
-                            cmap='inferno', s=200)  # , marker=m)
+    global router_heat
+    router_heat = ax.scatter(xs, ys, zs, c=colorValues,
+                             cmap='inferno', s=200)  # , marker=m)
 
 
 ###############################################################################
