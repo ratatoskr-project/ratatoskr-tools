@@ -1,5 +1,5 @@
 # ratatoskr-tools
-ratatoskr-tools is an API that helps the user to automate the simulation of ratatoskr simulator.
+ratatoskr-tools is an API that helps the user to automate the simulation of ratatoskr simulator. Moreover, it also provides the API that visualized the NoC network traffic heat.
 
 ## Installation
 1. Clone this repository to any folder that you would like to work for. (For example ~/Documents/ or ~/).
