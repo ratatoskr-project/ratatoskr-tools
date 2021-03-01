@@ -117,7 +117,7 @@ Here is the plotting for latencies:
 ```python
 import ratatoskr_tools.dataplot as rtdplt
 
-fig_latencies = rtdplt.plot_latencies(inj_rates, lats_flit, lats_network, lats_packet, plt_show=True)
+fig_latencies = rtdplt.plot_latencies(inj_rates, lats_flit, lats_packet, lats_network, plt_show=True)
 ```
 
 

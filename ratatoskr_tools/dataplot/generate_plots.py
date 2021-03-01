@@ -27,7 +27,7 @@ plt.rcParams.update({'figure.max_open_warning': 0})
 ###############################################################################
 
 
-def plot_latencies(inj_rates, latencies_flit, latencies_network, latencies_packet, xmin=0, xmax=0.1, output_file=None, plt_show=False):
+def plot_latencies(inj_rates, latencies_flit, latencies_packet, latencies_network, xmin=0, xmax=0.1, output_file=None, plt_show=False):
     """
     Read the raw results from a dictionary of objects, then plot the latencies.
 
