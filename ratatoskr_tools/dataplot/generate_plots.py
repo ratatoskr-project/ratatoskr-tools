@@ -69,7 +69,7 @@ def plot_latencies(inj_rates, latencies_flit, latencies_packet, latencies_networ
         plt.show()
 
     if output_file is not None:
-        assert os.path.isfile(output_file)
+        assert type(output_file) is str
         fig.savefig(output_file)
 
     return fig

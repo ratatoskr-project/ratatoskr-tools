@@ -34,7 +34,7 @@ def plot_static(network_xml, config_file, output_file=None, plt_show=False):
     plot_network.plot_faces()
 
     if output_file is not None:
-        assert os.path.isfile(output_file)
+        assert type(output_file) is str
         plot_network.plt.savefig(output_file)
 
     if plt_show:
