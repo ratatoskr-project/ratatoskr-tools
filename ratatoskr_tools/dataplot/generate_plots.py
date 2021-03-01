@@ -49,7 +49,7 @@ def plot_latencies(inj_rates, latencies_flit, latencies_packet, latencies_networ
 
     plt.ylabel('Latencies in ns', fontsize=11)
     plt.xlabel('Injection Rate', fontsize=11)
-    plt.xlim([0, (inj_rates[-1] + inj_rates[1])])
+    plt.xlim([0, (inj_rates[0] + inj_rates[-1])])
     plt.ylim([0, (mean_latencies_packet[-1] + 4 * std_latencies_packet[-1])])
 
     linestyle = {'linestyle': '--', 'linewidth': 1, 'markeredgewidth': 1,
@@ -57,12 +57,12 @@ def plot_latencies(inj_rates, latencies_flit, latencies_packet, latencies_networ
 
     plt.errorbar(inj_rates, mean_latencies_flit,
                  color='r', **linestyle, marker='*')
-    plt.errorbar(inj_rates, mean_latencies_network, yerr=std_latencies_network,
-                 color='b', **linestyle, marker='s')
     plt.errorbar(inj_rates, mean_latencies_packet, yerr=std_latencies_packet,
                  color='g', **linestyle, marker='^')
+    plt.errorbar(inj_rates, mean_latencies_network, yerr=std_latencies_network,
+                 color='b', **linestyle, marker='s')
 
-    plt.legend(['Flit', 'Network', 'Packet'])
+    plt.legend(['Flit', 'Packet', 'Network'])
     fig.suptitle('Latencies', fontsize=16)
 
     if plt_show is True:
