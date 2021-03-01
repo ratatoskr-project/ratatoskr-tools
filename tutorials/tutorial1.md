@@ -102,7 +102,7 @@ for idx, inj_rate in enumerate(inj_rates):
 
     vc_usages.append(rtdat.retrieve_vc_usages(simdirs))
     buff_usages.append(rtdat.retrieve_buff_usages(simdirs))
-    lats_flit[idx], lats_network[idx], lats_packet[idx] = rtdat.retrieve_diff_latencies(simdirs)
+    lats_flit[idx], lats_packet[idx], lats_network[idx] = rtdat.retrieve_diff_latencies(simdirs)
 
     rtsim.remove_all_simdirs("./example/", config.restarts)
 ```
