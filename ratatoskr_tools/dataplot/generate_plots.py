@@ -49,8 +49,8 @@ def plot_latencies(inj_rates, latencies_flit, latencies_packet, latencies_networ
 
     plt.ylabel('Latencies in ns', fontsize=11)
     plt.xlabel('Injection Rate', fontsize=11)
-    plt.xlim([0, max(inj_rates)])
-    plt.ylim([0, (max(mean_latencies_packet) + 4 * max(std_latencies_packet))])
+    plt.xlim([0, (inj_rates[-1] + inj_rates[1])])
+    plt.ylim([0, (mean_latencies_packet[-1] + 4 * std_latencies_packet[-1])])
 
     linestyle = {'linestyle': '--', 'linewidth': 1, 'markeredgewidth': 1,
                  'elinewidth': 1, 'capsize': 10}
