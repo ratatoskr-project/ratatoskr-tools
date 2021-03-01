@@ -27,7 +27,7 @@ plt.rcParams.update({'figure.max_open_warning': 0})
 ###############################################################################
 
 
-def plot_latencies(inj_rates, latencies_flit, latencies_packet, latencies_network, xmin=0, xmax=0.1, output_file=None, plt_show=False):
+def plot_latencies(inj_rates, latencies_flit, latencies_packet, latencies_network, output_file=None, plt_show=False):
     """
     Read the raw results from a dictionary of objects, then plot the latencies.
 
@@ -49,8 +49,8 @@ def plot_latencies(inj_rates, latencies_flit, latencies_packet, latencies_networ
 
     plt.ylabel('Latencies in ns', fontsize=11)
     plt.xlabel('Injection Rate', fontsize=11)
-    plt.xlim([xmin, xmax])
-    plt.ylim([0, (mean_latencies_packet[-1] + 4 * std_latencies_packet[-1])])
+    plt.xlim([0, max(inj_rates)])
+    plt.ylim([0, (max(mean_latencies_packet) + 4 * max(std_latencies_packet))])
 
     linestyle = {'linestyle': '--', 'linewidth': 1, 'markeredgewidth': 1,
                  'elinewidth': 1, 'capsize': 10}
