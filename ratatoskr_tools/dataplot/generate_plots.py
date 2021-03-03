@@ -31,11 +31,25 @@ def plot_latencies(inj_rates, latencies_flit, latencies_packet, latencies_networ
     """
     Read the raw results from a dictionary of objects, then plot the latencies.
 
-    Parameters:
-        - results: a dictionary of raw data from the pickle file.
+    Parameters
+    ----------
+    inj_rates : [type]
+        [description]
+    latencies_flit : [type]
+        [description]
+    latencies_packet : [type]
+        [description]
+    latencies_network : [type]
+        [description]
+    output_file : str, optional
+        write the image to the output path (plot.png), by default None no output file
+    plt_show : bool, optional
+        [description], by default False
 
-    Return:
-        - None.
+    Returns
+    -------
+    matplotlib.pyplot.figure()
+        Plotted figure.
     """
 
     mean_latencies_flit = np.mean(latencies_flit, axis=1)
@@ -49,8 +63,9 @@ def plot_latencies(inj_rates, latencies_flit, latencies_packet, latencies_networ
 
     plt.ylabel('Latencies in ns', fontsize=11)
     plt.xlabel('Injection Rate', fontsize=11)
-    plt.xlim([0, (inj_rates[0] + inj_rates[-1])])
-    plt.ylim([0, (mean_latencies_packet[-1] + 4 * std_latencies_packet[-1])])
+
+    plt.xlim([0, (inj_rates[-1]+inj_rates[1]-inj_rates[0])])
+    plt.ylim([0, max(mean_latencies_packet) + 4*max(std_latencies_packet)])
 
     linestyle = {'linestyle': '--', 'linewidth': 1, 'markeredgewidth': 1,
                  'elinewidth': 1, 'capsize': 10}
