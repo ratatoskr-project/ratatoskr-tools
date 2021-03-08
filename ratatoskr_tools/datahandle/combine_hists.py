@@ -21,7 +21,6 @@
 # SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 ###############################################################################
 import os
-import sys
 import csv
 import pandas as pd
 import numpy as np
