@@ -37,7 +37,7 @@ def retrieve_vc_usages(simdirs, config):
     return vc_usage_temp
 
 
-def retrieve_buff_usages(simdirs):
+def retrieve_buff_usages(simdirs, config):
     """
     Retrieve all the buff usages simulation result from the dummy simulation directories.
 
@@ -52,24 +52,27 @@ def retrieve_buff_usages(simdirs):
         The retrieved buff usages.
     """
 
-    buff_usage_inj = init_data_structure()
+    buff_usage_inj = init_data_structure(config)
 
     for simdir in simdirs:
-        buff_usage_run = combine_buff_hists(simdir + "/BuffUsage")
-        if buff_usage_run is not None:
-            for l in buff_usage_inj:
-                for d in buff_usage_inj[l]:
-                    buff_usage_inj[l][d] = buff_usage_inj[l][d].add(
-                        buff_usage_run[l][d], fill_value=0)
+        buff_usage_run = combine_buff_hists(
+            os.path.join(simdir, "BuffUsage"), config)
+
+        if buff_usage_run is None:
+            continue
+
+        for itr, buff in enumerate(buff_usage_inj):
+            for d in buff:
+                buff_usage_inj[itr][d] = buff_usage_inj[itr][d].add(
+                    buff_usage_run[itr][d], fill_value=0)
 
     # Average the buffer usage over restarts.
-    buff_usage_temp = init_data_structure()  # a dict of dicts
-    for l in buff_usage_inj:
-        for d in buff_usage_inj[l]:
-            buff_usage_temp[l][d] = np.ceil(
-                buff_usage_inj[l][d] / len(simdirs))
+    for itr, buff in enumerate(buff_usage_inj):
+        for d in buff:
+            buff_usage_inj[itr][d] = np.ceil(
+                buff_usage_inj[itr][d] / len(simdirs))
 
-    return buff_usage_temp
+    return buff_usage_inj
 
 
 def retrieve_diff_latencies(simdirs):

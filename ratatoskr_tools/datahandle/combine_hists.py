@@ -133,7 +133,7 @@ def read_dataframe(layers, path, layer, directory):
 ###############################################################################
 
 
-def init_data_structure():
+def init_data_structure(config):
     """
     Initialize the data structure named 'layers' which is a dictionary of
     dictionaries.
@@ -147,11 +147,8 @@ def init_data_structure():
     layer_temp = {'Up': pd.DataFrame(), 'Down': pd.DataFrame(),
                   'North': pd.DataFrame(), 'South': pd.DataFrame(),
                   'East': pd.DataFrame(), 'West': pd.DataFrame()}
-    layers = {'Bottom': layer_temp, 'Middle': layer_temp.copy(),
-              'Top': layer_temp.copy()}
 
-    del layers['Bottom']['Down']  # bottom layer has no down direction
-    del layers['Top']['Up']  # top layer has no up direction
+    layers = [layer_temp.copy() for itr in range(config.z)]
 
     return layers
 ###############################################################################
@@ -171,55 +168,24 @@ def combine_buff_hists(directory, config):
     if not os.path.exists(directory):
         return None
 
-    layers = init_data_structure()
+    layers = init_data_structure(config)
+    layers_range = create_layers_range(config)
 
     for filename in os.listdir(directory):
         router_id = int(filename.split('.')[0].split('_')[0])
         direction = filename.split('.')[0].split('_')[1]
         path = directory + '/' + filename
-        if router_id in range(0, 16):
-            layer = 'Bottom'
-            if direction == 'Up':
-                layers = read_dataframe(layers, path, layer, 'Up')
-            if direction == 'North':
-                layers = read_dataframe(layers, path, layer, 'North')
-            if direction == 'South':
-                layers = read_dataframe(layers, path, layer, 'South')
-            if direction == 'East':
-                layers = read_dataframe(layers, path, layer, 'East')
-            if direction == 'West':
-                layers = read_dataframe(layers, path, layer, 'West')
-        if router_id in range(16, 32):
-            layer = 'Middle'
-            if direction == 'Up':
-                layers = read_dataframe(layers, path, layer, 'Up')
-            if direction == 'Down':
-                layers = read_dataframe(layers, path, layer, 'Down')
-            if direction == 'North':
-                layers = read_dataframe(layers, path, layer, 'North')
-            if direction == 'South':
-                layers = read_dataframe(layers, path, layer, 'South')
-            if direction == 'East':
-                layers = read_dataframe(layers, path, layer, 'East')
-            if direction == 'West':
-                layers = read_dataframe(layers, path, layer, 'West')
-        if router_id in range(32, 48):
-            layer = 'Top'
-            if direction == 'Down':
-                layers = read_dataframe(layers, path, layer, 'Down')
-            if direction == 'North':
-                layers = read_dataframe(layers, path, layer, 'North')
-            if direction == 'South':
-                layers = read_dataframe(layers, path, layer, 'South')
-            if direction == 'East':
-                layers = read_dataframe(layers, path, layer, 'East')
-            if direction == 'West':
-                layers = read_dataframe(layers, path, layer, 'West')
+
+        if direction not in ['Up', 'Down', 'North', 'South', 'East', 'West']:
+            continue
+
+        layer_num = find_layer_num(layers_range, router_id)
+        layers = read_dataframe(layers, path, layer_num, direction)
 
     # average the buffer usage over the inner routers (#4)
-    for l in layers:
-        for d in layers[l]:
-            layers[l][d] = np.ceil(layers[l][d] / 4)
+    for itr, layer in enumerate(layers):
+        for d in layer:
+            layers[itr][d] = np.ceil(layers[itr][d] / 4)
 
     return layers
 
