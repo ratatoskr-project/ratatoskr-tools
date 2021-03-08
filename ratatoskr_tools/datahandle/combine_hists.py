@@ -97,30 +97,34 @@ def init_data_structure(config):
     return layers
 
 
-def read_dataframe(layers, path, layer_id, directory):
+def read_dataframe(data, path, layer_id, direction):
     """
     Read a data frame from csv file then accumulate the data.
 
-    Parameters:
-        - layers: a dictionary of dictionaries, and this is the data that
-        needs to bee updated.
-        - path: the path of the csv file to be read.
-        - layer: the key of outmost dictionary layers.
-        - directory: the key of innermost dictionary layers[layer]
+    Parameters
+    ----------
+    data : list
+        The list of flit traffic direction and this is the data that needs to be updated
+    path : str
+        the path of the csv file to be read.
+    layer_id : int
+        layer id of the router located
+    direction : str
+        Direction of the flit that is moving. Available options are
+        Up, Down, East, West, North and South
 
-    Return:
-       - The updated data structure layers,
-         or None if the csv file not exists.
+    Returns
+    -------
+    list
+        The updated list of flit traffic direction. Remain unchange if the csv file does not exist
     """
     temp = pd.read_csv(path, index_col=0)
     if temp.empty:
-        return layers
+        return data
 
-    layers[layer_id][directory] = layers[layer_id][directory].add(
+    data[layer_id][direction] = data[layer_id][direction].add(
         temp, fill_value=0)
-    return layers
-
-    return None
+    return data
 
 
 def get_latencies(latencies_results_file):
