@@ -51,7 +51,7 @@ def create_layers_range(config):
     return layers_range
 
 
-def find_layer_num(layers_range, router_id):
+def find_layer_id(layers_range, router_id):
     """
     Find layer id of the router.
 
@@ -97,7 +97,7 @@ def init_data_structure(config):
     return layers
 
 
-def read_dataframe(layers, path, layer_num, directory):
+def read_dataframe(layers, path, layer_id, directory):
     """
     Read a data frame from csv file then accumulate the data.
 
@@ -114,7 +114,7 @@ def read_dataframe(layers, path, layer_num, directory):
     """
     temp = pd.read_csv(path, index_col=0)
     if not temp.empty:
-        layers[layer_num][directory] = layers[layer_num][directory].add(
+        layers[layer_id][directory] = layers[layer_id][directory].add(
             temp, fill_value=0)
         return layers
 
@@ -171,10 +171,10 @@ def combine_vc_hists(directory, config):
     layers_range = create_layers_range(config)
     for fname in os.listdir(directory):
         router_id = int(fname.split('.')[0])
-        layer_num = find_layer_num(layers_range, router_id)
+        layer_id = find_layer_id(layers_range, router_id)
         temp = pd.read_csv(os.path.join(directory, fname),
                            header=None, index_col=0).T
-        data[layer_num] = data[layer_num].add(temp, fill_value=0)
+        data[layer_id] = data[layer_id].add(temp, fill_value=0)
 
     for df in data:
         df.columns.name = 'Direction'
@@ -197,7 +197,7 @@ def combine_buff_hists(directory, config):
     if not os.path.exists(directory):
         return None
 
-    layers = init_data_structure(config)
+    data = init_data_structure(config)
     layers_range = create_layers_range(config)
 
     for filename in os.listdir(directory):
@@ -208,12 +208,12 @@ def combine_buff_hists(directory, config):
         if direction not in ['Up', 'Down', 'North', 'South', 'East', 'West']:
             continue
 
-        layer_num = find_layer_num(layers_range, router_id)
-        layers = read_dataframe(layers, path, layer_num, direction)
+        layer_id = find_layer_id(layers_range, router_id)
+        data = read_dataframe(data, path, layer_id, direction)
 
     # average the buffer usage over the inner routers (#4)
-    for itr, layer in enumerate(layers):
+    for itr, layer in enumerate(data):
         for d in layer:
-            layers[itr][d] = np.ceil(layers[itr][d] / 4)
+            data[itr][d] = np.ceil(data[itr][d] / 4)
 
-    return layers
+    return data
