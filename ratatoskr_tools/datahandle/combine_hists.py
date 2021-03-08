@@ -57,7 +57,7 @@ def create_layers_range(config):
     layers_range = []
     router_counter = 0
     for x, y in zip(config.x, config.y):
-        layers_range.append(range(router_counter, x*y))
+        layers_range.append(range(router_counter, router_counter+x*y))
         router_counter += x*y
     return layers_range
 
