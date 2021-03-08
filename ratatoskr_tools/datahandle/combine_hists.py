@@ -105,9 +105,6 @@ def combine_vc_hists(directory, config):
     return data
 
 
-###############################################################################
-
-
 def read_dataframe(layers, path, layer_num, directory):
     """
     Read a data frame from csv file then accumulate the data.
@@ -130,7 +127,6 @@ def read_dataframe(layers, path, layer_num, directory):
         return layers
 
     return None
-###############################################################################
 
 
 def init_data_structure(config):
@@ -151,7 +147,6 @@ def init_data_structure(config):
     layers = [layer_temp.copy() for itr in range(config.z)]
 
     return layers
-###############################################################################
 
 
 def combine_buff_hists(directory, config):
@@ -188,17 +183,3 @@ def combine_buff_hists(directory, config):
             layers[itr][d] = np.ceil(layers[itr][d] / 4)
 
     return layers
-
-
-###############################################################################
-
-
-if __name__ == '__main__':
-    try:
-        VC_dir = sys.argv[1]
-        Buff_dir = sys.argv[2]
-    except Exception:
-        print('Please enter the directory path.')
-    else:
-        combine_vc_hists(VC_dir)
-        combine_buff_hists(Buff_dir)
