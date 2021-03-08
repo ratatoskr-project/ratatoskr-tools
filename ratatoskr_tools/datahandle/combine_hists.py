@@ -28,6 +28,65 @@ import numpy as np
 ###############################################################################
 
 
+def create_layers_range(config):
+    layers_range = []
+    router_counter = 0
+    for x, y in zip(config.x, config.y):
+        layers_range.append(range(router_counter, router_counter+x*y))
+        router_counter += x*y
+    return layers_range
+
+
+def find_layer_num(layers_range, router_id):
+    for itr, layer_range in enumerate(layers_range):
+        if router_id in layer_range:
+            return itr
+
+
+def init_data_structure(config):
+    """
+    Initialize the data structure named 'layers' which is a dictionary of
+    dictionaries.
+
+    Parameters:
+        - None
+
+    Return:
+        - The initilazed data structure
+    """
+    layer_temp = {'Up': pd.DataFrame(), 'Down': pd.DataFrame(),
+                  'North': pd.DataFrame(), 'South': pd.DataFrame(),
+                  'East': pd.DataFrame(), 'West': pd.DataFrame()}
+
+    layers = [layer_temp.copy() for itr in range(config.z)]
+
+    return layers
+
+
+def read_dataframe(layers, path, layer_num, directory):
+    """
+    Read a data frame from csv file then accumulate the data.
+
+    Parameters:
+        - layers: a dictionary of dictionaries, and this is the data that
+        needs to bee updated.
+        - path: the path of the csv file to be read.
+        - layer: the key of outmost dictionary layers.
+        - directory: the key of innermost dictionary layers[layer]
+
+    Return:
+       - The updated data structure layers,
+         or None if the csv file not exists.
+    """
+    temp = pd.read_csv(path, index_col=0)
+    if not temp.empty:
+        layers[layer_num][directory] = layers[layer_num][directory].add(
+            temp, fill_value=0)
+        return layers
+
+    return None
+
+
 def get_latencies(latencies_results_file):
     """
     Read the resulting latencies from the csv file.
@@ -51,21 +110,6 @@ def get_latencies(latencies_results_file):
         latencies.append(-1)
 
     return latencies
-
-
-def create_layers_range(config):
-    layers_range = []
-    router_counter = 0
-    for x, y in zip(config.x, config.y):
-        layers_range.append(range(router_counter, router_counter+x*y))
-        router_counter += x*y
-    return layers_range
-
-
-def find_layer_num(layers_range, router_id):
-    for itr, layer_range in enumerate(layers_range):
-        if router_id in layer_range:
-            return itr
 
 
 def combine_vc_hists(directory, config):
@@ -103,50 +147,6 @@ def combine_vc_hists(directory, config):
         df.index.name = 'Number of VCs'
 
     return data
-
-
-def read_dataframe(layers, path, layer_num, directory):
-    """
-    Read a data frame from csv file then accumulate the data.
-
-    Parameters:
-        - layers: a dictionary of dictionaries, and this is the data that
-        needs to bee updated.
-        - path: the path of the csv file to be read.
-        - layer: the key of outmost dictionary layers.
-        - directory: the key of innermost dictionary layers[layer]
-
-    Return:
-       - The updated data structure layers,
-         or None if the csv file not exists.
-    """
-    temp = pd.read_csv(path, index_col=0)
-    if not temp.empty:
-        layers[layer_num][directory] = layers[layer_num][directory].add(
-            temp, fill_value=0)
-        return layers
-
-    return None
-
-
-def init_data_structure(config):
-    """
-    Initialize the data structure named 'layers' which is a dictionary of
-    dictionaries.
-
-    Parameters:
-        - None
-
-    Return:
-        - The initilazed data structure
-    """
-    layer_temp = {'Up': pd.DataFrame(), 'Down': pd.DataFrame(),
-                  'North': pd.DataFrame(), 'South': pd.DataFrame(),
-                  'East': pd.DataFrame(), 'West': pd.DataFrame()}
-
-    layers = [layer_temp.copy() for itr in range(config.z)]
-
-    return layers
 
 
 def combine_buff_hists(directory, config):
