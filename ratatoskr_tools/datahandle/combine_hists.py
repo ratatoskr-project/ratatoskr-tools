@@ -113,10 +113,12 @@ def read_dataframe(layers, path, layer_id, directory):
          or None if the csv file not exists.
     """
     temp = pd.read_csv(path, index_col=0)
-    if not temp.empty:
-        layers[layer_id][directory] = layers[layer_id][directory].add(
-            temp, fill_value=0)
+    if temp.empty:
         return layers
+
+    layers[layer_id][directory] = layers[layer_id][directory].add(
+        temp, fill_value=0)
+    return layers
 
     return None
 
