@@ -29,6 +29,20 @@ import numpy as np
 
 
 def create_layers_range(config):
+    """
+    Calculate the router id range for each layer of NoC.
+
+    Parameters
+    ----------
+    config : [type]
+        Configuration
+
+    Returns
+    -------
+    [type]
+        list of router id range
+    """
+
     layers_range = []
     router_counter = 0
     for x, y in zip(config.x, config.y):
@@ -38,6 +52,21 @@ def create_layers_range(config):
 
 
 def find_layer_num(layers_range, router_id):
+    """
+    Find layer id of the router.
+
+    Parameters
+    ----------
+    layers_range : [type]
+        list of router id range
+    router_id : int
+        [description]
+
+    Returns
+    -------
+    int
+        layer id
+    """
     for itr, layer_range in enumerate(layers_range):
         if router_id in layer_range:
             return itr
@@ -45,14 +74,19 @@ def find_layer_num(layers_range, router_id):
 
 def init_data_structure(config):
     """
-    Initialize the data structure named 'layers' which is a dictionary of
-    dictionaries.
+    Initialize the data structure named 'layers' which is a list (the length of the list
+    is the number of NoC layer) of dictionaries that contains the flit transfer direction
+    in the form of pandas data frame.
 
-    Parameters:
-        - None
+    Parameters
+    ----------
+    config : [type]
+        Configuration
 
-    Return:
-        - The initilazed data structure
+    Returns
+    -------
+    [type]
+        The initilazed data structure
     """
     layer_temp = {'Up': pd.DataFrame(), 'Down': pd.DataFrame(),
                   'North': pd.DataFrame(), 'South': pd.DataFrame(),
