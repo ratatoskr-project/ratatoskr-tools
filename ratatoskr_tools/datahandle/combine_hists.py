@@ -108,7 +108,7 @@ def combine_vc_hists(directory, config):
 ###############################################################################
 
 
-def read_dataframe(layers, path, layer, directory):
+def read_dataframe(layers, path, layer_num, directory):
     """
     Read a data frame from csv file then accumulate the data.
 
@@ -125,7 +125,7 @@ def read_dataframe(layers, path, layer, directory):
     """
     temp = pd.read_csv(path, index_col=0)
     if not temp.empty:
-        layers[layer][directory] = layers[layer][directory].add(
+        layers[layer_num][directory] = layers[layer_num][directory].add(
             temp, fill_value=0)
         return layers
 
