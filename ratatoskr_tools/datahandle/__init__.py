@@ -3,7 +3,7 @@ import pandas as pd
 from .combine_hists import *
 
 
-def retrieve_vc_usages(simdirs):
+def retrieve_vc_usages(simdirs, config):
     """
     Retrieve all the vc usages simulation result from the dummy simulation directories.
 
@@ -21,7 +21,8 @@ def retrieve_vc_usages(simdirs):
     vc_usage_inj = [pd.DataFrame() for i in range(3)]
 
     for simdir in simdirs:
-        vc_usage_run = combine_vc_hists(simdir + "/VCUsage")
+        vc_usage_run = combine_vc_hists(
+            os.path.join(simdir, "VCUsage"), config)
 
         if vc_usage_run is not None:
             for idx, layer_df in enumerate(vc_usage_run):

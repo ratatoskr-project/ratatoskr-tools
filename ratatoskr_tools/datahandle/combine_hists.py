@@ -53,44 +53,63 @@ def get_latencies(latencies_results_file):
     return latencies
 
 
-def combine_vc_hists(directory):
-    """
+def create_layers_range(config):
+    layers_range = []
+    router_counter = 0
+    for x, y in zip(config.x, config.y):
+        layers_range.append(range(router_counter, x*y))
+        router_counter += x*y
+    return layers_range
+
+
+def find_layer_num(layers_range, router_id):
+    for itr, layer_range in enumerate(layers_range):
+        if router_id in layer_range:
+            return itr
+
+
+def combine_vc_hists(directory, config):
+    """[summary]
     Combine the VC histograms from csv files.
+    Parameters
+    ----------
+    directory : [type]
+        the path of the directory that contains the files.
+    config : [type]
+        [description]
 
-    Parameters:
-        - directory: the path of the directory that contains the files.
-
-    Return:
-        - A dataframe object of the combined csv files,
+    Returns
+    -------
+    [type]
+        A dataframe object of the combined csv files,
         or None if the directory doesn't exist.
     """
-    if os.path.exists(directory):
-        layer0 = pd.DataFrame()
-        layer1 = pd.DataFrame()
-        layer2 = pd.DataFrame()
-        for filename in os.listdir(directory):
-            router_id = int(filename.split('.')[0])
-            if router_id in range(0, 16):
-                temp = pd.read_csv(directory + '/' + filename, header=None,
-                                   index_col=0).T
-                layer0 = layer0.add(temp, fill_value=0)
-            if router_id in range(16, 32):
-                temp = pd.read_csv(directory + '/' + filename, header=None,
-                                   index_col=0).T
-                layer1 = layer1.add(temp, fill_value=0)
-            if router_id in range(32, 48):
-                temp = pd.read_csv(directory + '/' + filename, header=None,
-                                   index_col=0).T
-                layer2 = layer2.add(temp, fill_value=0)
 
-        data = [layer0, layer1, layer2]
-        for df in data:
-            df.columns.name = 'Direction'
-            df.index.name = 'Number of VCs'
+    if not os.path.exists(directory):
+        return None
 
-        return data
+    layers = [pd.DataFrame() for itr in range(config.z)]
+    print(layers)
 
-    return None
+    layers_range = create_layers_range(config)
+    print(layers_range)
+    for fname in os.listdir(directory):
+        router_id = int(fname.split('.')[0])
+        layer_num = find_layer_num(layers_range, router_id)
+        print(layer_num)
+        temp = pd.read_csv(os.path.join(directory, fname),
+                           header=None, index_col=0).T
+        print(temp)
+        print(layers[layer_num])
+        layers[layer_num] = layers[layer_num].add(temp, fill_value=0)
+
+    for df in layers:
+        df.columns.name = 'Direction'
+        df.index.name = 'Number of VCs'
+
+    return layers
+
+
 ###############################################################################
 
 
