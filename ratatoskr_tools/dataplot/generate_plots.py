@@ -179,8 +179,8 @@ def plot_buff_usage_stats(buff_usages, inj_rates, output_dir=None, plt_show=Fals
                     ax.set_zlabel('Count')
                     ax.set_title('Direction:'+str(d))
 
-            fig.suptitle('Layer: '+str(layer_name)+', Injection Rate = '
-                         + str(inj_rate), fontsize=16)
+            fig.suptitle('Layer: {}, Injection Rate = {}'.format(
+                layer_id, inj_rate), fontsize=16)
 
             if plt_show is True:
                 plt.show()
