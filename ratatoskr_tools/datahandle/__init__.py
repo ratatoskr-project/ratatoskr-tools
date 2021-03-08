@@ -18,7 +18,7 @@ def retrieve_vc_usages(simdirs, config):
         The retrieved vc usages.
     """
 
-    vc_usage_inj = [pd.DataFrame() for i in range(3)]
+    vc_usage_inj = [pd.DataFrame() for itr in range(config.z)]
 
     for simdir in simdirs:
         vc_usage_run = combine_vc_hists(
