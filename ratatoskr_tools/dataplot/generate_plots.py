@@ -142,9 +142,8 @@ def plot_buff_usage_stats(buff_usages, inj_rates, output_dir=None, plt_show=Fals
         - None.
     """
     figs = []
-    for inj_dict, inj_rate in zip(buff_usages, inj_rates):
-        for layer_id, layer_name in enumerate(inj_dict):
-            layer_dict = inj_dict[layer_name]
+    for buff_usage, inj_rate in zip(buff_usages, inj_rates):
+        for layer_id, layer_dict in enumerate(buff_usage):
             fig = plt.figure()
             for it, d in enumerate(layer_dict):
                 df = layer_dict[d]
