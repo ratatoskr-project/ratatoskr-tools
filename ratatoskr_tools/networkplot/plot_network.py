@@ -25,6 +25,8 @@
 import xml.etree.ElementTree as ET
 import configparser
 import numpy as np
+import json
+import zmq
 from mpl_toolkits.mplot3d import Axes3D
 from mpl_toolkits.mplot3d.art3d import Poly3DCollection
 import matplotlib.pyplot as plt
@@ -289,3 +291,107 @@ def plot_faces():
 
 
 ###############################################################################
+# GENERAL USAGE API
+###############################################################################
+
+def plot_static(network_xml, config_file, output_file=None, plt_show=False):
+    """
+    Plot the static network.
+
+    Parameters
+    ----------
+    network_xml : str
+        Path of network.xml file
+    config_file : str
+        Path of config.ini file
+    output_file : str, optional
+        The generated network plot is outputted to the given path, by default None
+    plt_show : bool, optional
+        The generated network plot is showed, by default False
+
+    Returns
+    -------
+    Figure
+        The generated network plot.
+    """
+
+    init_script(network_xml, config_file)
+    create_fig()
+    plot_nodes()
+    plot_connections()
+    annotate_points()
+    create_faces()
+    plot_faces()
+
+    if output_file is not None:
+        assert type(output_file) is str
+        plt.savefig(output_file)
+
+    if plt_show:
+        plt.show()
+
+    return fig
+
+
+def plot_dynamic(network_xml, config_file, host="localhost", port=5555, max_request=2000000):
+    """
+    Plot the dynamic network which connect to the GUI server of the ratatoskr simulator.
+
+    Parameters
+    ----------
+    network_xml : str
+        Path of network.xml file
+    config_file : str
+        Path of config.ini file
+    host : str, optional
+        tcp server host ip, by default "localhost"
+    port : int, optional
+        tcp port number, by default 5555
+    max_request : int, optional
+        maximum request count to the server, by default 2000000
+    """
+
+    init_script(network_xml, config_file)
+    create_fig()
+    plot_connections()
+
+    colorize_nodes(range(len(points)))
+
+    xlim = ax.get_xlim3d()
+    ylim = ax.get_ylim3d()
+    zlim = ax.get_zlim3d()
+
+    time_stamp = ax.text(2, 2, 2, 0, size=12, color='red')
+    avg_router_load = [0] * len(points)
+
+    context = zmq.Context()
+
+    print("Connecting to simulator server")
+    socket = context.socket(zmq.REQ)
+    socket.connect("tcp://{}:{}".format(host, port))
+
+    for request in range(max_request):
+        socket.send_string("Cient request {}".format(request))
+        message = socket.recv()
+
+        data = json.loads(message)
+        time = float(data["Time"]["time"])
+
+        for router_idx in range(len(points)):
+            current_router_val = float(
+                data["Data"][router_idx]["averagebufferusage"])
+            alpha = .01
+            avg_router_load[router_idx] = alpha * current_router_val + \
+                (1-alpha) * avg_router_load[router_idx]
+
+        router_heat.remove()
+        colorize_nodes(avg_router_load)
+        time_stamp.remove()
+
+        time_stamp_val = "Time: {} ns".format(time/1000)
+        time_stamp = ax.text(
+            xlim[0], ylim[-1], zlim[-1], time_stamp_val, size=12, color='red')
+
+        plt.pause(1/30)
+
+    plt.show()
