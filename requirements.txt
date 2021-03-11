@@ -5,3 +5,9 @@ joblib
 pandas
 PyPDF2
 pylint
+isort
+ipython
+jedi
+jupyter
+jupyter_contrib_nbextensions
+nbconvert

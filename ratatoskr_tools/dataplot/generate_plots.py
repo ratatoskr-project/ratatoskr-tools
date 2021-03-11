@@ -21,8 +21,10 @@
 # SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 ###############################################################################
 import os
-import numpy as np
+
 import matplotlib.pyplot as plt
+import numpy as np
+
 plt.rcParams.update({'figure.max_open_warning': 0})
 ###############################################################################
 

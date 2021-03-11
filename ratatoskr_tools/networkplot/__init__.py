@@ -1,1 +1,1 @@
-from .plot_network import plot_static, plot_dynamic
+from .plot_network import plot_dynamic, plot_static

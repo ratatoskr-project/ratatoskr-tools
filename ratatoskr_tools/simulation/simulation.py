@@ -1,6 +1,7 @@
+import multiprocessing
 import os
 import subprocess
-import multiprocessing
+
 from joblib import Parallel, delayed
 
 

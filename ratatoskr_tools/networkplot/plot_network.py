@@ -20,16 +20,18 @@
 # TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
 # SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
+import configparser
+import json
 # This script generates simple topology files for mesh, torus and ring
 ###############################################################################
 import xml.etree.ElementTree as ET
-import configparser
+
+import matplotlib.pyplot as plt
 import numpy as np
-import json
 import zmq
 from mpl_toolkits.mplot3d import Axes3D
 from mpl_toolkits.mplot3d.art3d import Poly3DCollection
-import matplotlib.pyplot as plt
+
 ###############################################################################
 # Global variables
 fig = None  # Figure Object

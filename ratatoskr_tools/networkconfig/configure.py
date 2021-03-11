@@ -21,8 +21,9 @@
 # SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 ###############################################################################
 import configparser
-import os
 import multiprocessing
+import os
+
 ###############################################################################
 
 
