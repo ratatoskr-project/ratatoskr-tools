@@ -11,9 +11,8 @@ setup(
     license='MIT',
     packages=find_packages(exclude=['docs*', 'tests*']),
     package_data={
-        '': ['ratatoskr_tools/networkconfig/config.ini']
+        'ratatoskr_tools.networkconfig': ['*.ini']
     },
-    include_package_data=True,
     entry_points={
         'console_scripts': ['']
     },
