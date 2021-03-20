@@ -29,4 +29,6 @@ clean:
 	find . -name 'nosetest_results.txt' -delete
 	rm -rf dist
 	rm -rf build
+	rm -rf ratatoskr_tools.egg-info
+	rm -rf venv
 
