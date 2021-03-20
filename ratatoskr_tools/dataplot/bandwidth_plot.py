@@ -3,14 +3,14 @@ import matplotlib.pyplot as plt
 
 def plot_bandwidth(input_bandwidth, output_bandwidth, output_file=None, plt_show=False):
     """
-    Plot the bandwidth of one
+    Plot the bandwidth of one simulation.
 
     Parameters
     ----------
-    input_bandwidth : [type]
-        [description]
-    output_bandwidth : [type]
-        [description]
+    input_bandwidth : tuple
+        Contains 2 elements, which are the time (x-axis) and bandwidth (y-axis) data.
+    output_bandwidth : tuple
+        Contains 2 elements, which are the time (x-axis) and bandwidth (y-axis) data.
     output_file : str, optional
         write the image to the output path (plot.png), by default None no output file
     plt_show : bool, optional
