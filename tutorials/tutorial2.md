@@ -8,7 +8,7 @@ Before this tutorial, it is required to compile and retrieve the execution simul
 Let's compile the simulator:
 ```console
 $ cd ../ratatoskr/simulator
-$ cmake -DDEFINE_ENABLE_GUI
+$ cmake -DDEFINE_ENABLE_GUI=ON
 $ make
 $ cd ../../tutorials
 ```
