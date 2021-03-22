@@ -10,7 +10,7 @@ Let's compile the simulator:
 $ cd ../ratatoskr/simulator
 $ cmake -DDEFINE_ENABLE_GUI
 $ make
-$ cd ../tutorials
+$ cd ../../tutorials
 ```
 
 ## Step 1 Network Configuration
