@@ -52,7 +52,7 @@ def remove_all_simdirs(basedir, restarts):
         os.system(cmd)
 
 
-def run_single_sim(simulator, config_path, network_path, output_dir="."):
+def run_single_sim(simulator, config_path, network_path, output_dir=".", **kwargs):
     """
     Run the simulation once according to the given config_path and network_path.
     Then, the result of the simulation is outputted to the output_dir.
@@ -75,7 +75,11 @@ def run_single_sim(simulator, config_path, network_path, output_dir="."):
     network_path = "--networkPath=" + network_path
     output_dir = "--outputDir=" + output_dir
 
-    args = (simulator, config_path, network_path, output_dir)
+    args = [simulator, config_path, network_path, output_dir]
+
+    for key, val in kwargs.items():
+        args.append("--{}={}".format(key, val))
+
     try:
         subprocess.run(args, stdout=outfile, check=True)
     except subprocess.CalledProcessError:
