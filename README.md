@@ -3,15 +3,20 @@ ratatoskr-tools is an API that helps the user to automate the simulation of rata
 
 ## Installation
 1. Clone this repository to any folder that you would like to work for. (For example ~/Documents/ or ~/).
-> $ git clone https://github.com/jmjos/ratatoskr-tools.git
+```console
+$ git clone https://github.com/jmjos/ratatoskr-tools.git
+```
 
 2. Create virtual environment to install this package in it and activate the virtual environment. The provided Makefile has provided the packages for the virtual envoronment. If you want to install in your machine locally, then skip this step.
-> $ make
-
-> $ source source_me.sh
+```console
+$ make
+$ source source_me.sh
+```
 
 3. Install this package to your current working environment. (If your environment exists python and python3 then use python3 instead of python).
-> $ python setup.py install
+```console
+$ python setup.py install
+```
 
 ## API Tutorials
 - [tutorial 1: Overall simulation](./tutorials/tutorial1.md)
