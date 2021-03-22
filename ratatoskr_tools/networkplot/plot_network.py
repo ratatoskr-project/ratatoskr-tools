@@ -20,7 +20,6 @@
 # TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
 # SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
-import configparser
 import json
 # This script generates simple topology files for mesh, torus and ring
 ###############################################################################
@@ -52,7 +51,7 @@ faces = []  # List of the faces, for drawing reasons
 ###############################################################################
 # INIT
 ###############################################################################
-def init_script(network_xml, config_file):
+def init_script(network_xml):
     """
     Initialize the script by reading the mesh information from the mesh xml file
     """
@@ -63,16 +62,13 @@ def init_script(network_xml, config_file):
     else:
         root = tree.getroot()
 
-        config = configparser.ConfigParser()
-        config.read(config_file)
-
         # network topology for different plot
         global topology
-        topology = config['Hardware']['topology']
+        topology = root.find('topology').text
 
         # Number of layers
         global num_of_layers
-        num_of_layers = int(config['Hardware']['z'])
+        num_of_layers = int(root.find('abstract').find('z').attrib['value'])
 
         # Find the id of the ProcessingElements
         proc_elemnt_ids = []
@@ -296,7 +292,7 @@ def plot_faces():
 # GENERAL USAGE API
 ###############################################################################
 
-def plot_static(network_xml, config_file, output_file=None, plt_show=False):
+def plot_static(network_xml, output_file=None, plt_show=False):
     """
     Plot the static network.
 
@@ -304,8 +300,6 @@ def plot_static(network_xml, config_file, output_file=None, plt_show=False):
     ----------
     network_xml : str
         Path of network.xml file
-    config_file : str
-        Path of config.ini file
     output_file : str, optional
         The generated network plot is outputted to the given path, by default None
     plt_show : bool, optional
@@ -317,7 +311,7 @@ def plot_static(network_xml, config_file, output_file=None, plt_show=False):
         The generated network plot.
     """
 
-    init_script(network_xml, config_file)
+    init_script(network_xml)
     create_fig()
     plot_nodes()
     plot_connections()
@@ -335,7 +329,7 @@ def plot_static(network_xml, config_file, output_file=None, plt_show=False):
     return fig
 
 
-def plot_dynamic(network_xml, config_file, host="localhost", port=5555, max_request=2000000):
+def plot_dynamic(network_xml, host="localhost", port=5555, max_request=2000000):
     """
     Plot the dynamic network which connect to the GUI server of the ratatoskr simulator.
 
@@ -343,8 +337,6 @@ def plot_dynamic(network_xml, config_file, host="localhost", port=5555, max_requ
     ----------
     network_xml : str
         Path of network.xml file
-    config_file : str
-        Path of config.ini file
     host : str, optional
         tcp server host ip, by default "localhost"
     port : int, optional
@@ -353,7 +345,7 @@ def plot_dynamic(network_xml, config_file, host="localhost", port=5555, max_requ
         maximum request count to the server, by default 2000000
     """
 
-    init_script(network_xml, config_file)
+    init_script(network_xml)
     create_fig()
     plot_connections()
 
