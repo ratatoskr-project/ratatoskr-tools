@@ -27,14 +27,18 @@ before_script:
         - cd ../..
 
 script:
-        - export SYSTEMC_DISABLE_COPYRIGHT_MESSAGE=1
-        - cd ratatoskr/simulator
-        - git checkout new-features-2021-01
-        - ./build.sh
-        - cd ../..
         - make
         - source source_me.sh
         - python setup.py install
-        - cd ./tutorials/
+        - export SYSTEMC_DISABLE_COPYRIGHT_MESSAGE=1
+        - cd ./ratatoskr/simulator
+        - git checkout new-features-2021-01
+        - ./build.sh
+        - cd ../../tutorials/
         - jupyter nbconvert --to notebook --inplace --execute tutorial1.ipynb
         - jupyter nbconvert --to notebook --inplace --execute tutorial3.ipynb
+        - cd ../ratatoskr/simulator
+        - cmake -DDEFINE_ENABLE_NETRACE
+        - make
+        - cd ../../tutorials
+        - jupyter nbconvert --to notebook --inplace --execute tutorial4.ipynb
