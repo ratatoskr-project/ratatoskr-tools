@@ -4,7 +4,14 @@ In this tutorial, you will know how to use the ratatoskr GUI client, which let y
 
 ## Prerequisite
 
-Before the tutorial, it is required that to compile and retrieve the simulator (./sim) from the ratatoskr simulator repository. Remember to enable the GUI options while compiling the simulator (add "-D ENABLE_GUI").
+Before this tutorial, it is required to compile and retrieve the execution simulator program "./sim" from the ratatoskr/simulator repository. Here, we need to add "-DDEFINE_ENABLE_GUI" while executing the cmake.
+Let's compile the simulator:
+```console
+$ cd ../ratatoskr/simulator
+$ cmake -DDEFINE_ENABLE_GUI
+$ make
+$ cd ../tutorials
+```
 
 ## Step 1 Network Configuration
 Create the config.ini file and generate the config.xml and network.xml files.
@@ -32,6 +39,13 @@ rtnplt.plot_dynamic("./example/network.xml")
 
 Open another terminal to run the simulation, where this simulator is compiled with the enable gui options (-D ENABLE_GUI).
 
-> $ ./sim --configPath=./example/config.xml --networkPath=./example/network.xml --outputPath=./example
+```console
+$ ../ratatoskr/simulator/sim --configPath=./example/config.xml --networkPath=./example/network.xml --outputPath=./example
+```
 
 The ratatoskr GUI client windows will be opened.
+
+
+```python
+
+```

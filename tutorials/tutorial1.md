@@ -4,7 +4,16 @@ Welcome to the tutorial 1 of the ratatoskr-tools. In this section, you will get 
 
 ## Prerequisite
 
-Before this tutorial, it is required to compile and retrieve the execution simulator program "./sim" from the ratatoskr/simulator repository. Here, we set the simulator path as shown:
+Before this tutorial, it is required to compile and retrieve the execution simulator program "./sim" from the ratatoskr/simulator repository. 
+Let's compile the simulator:
+```console
+$ cd ../ratatoskr/simulator
+$ cmake
+$ make
+$ cd ../tutorials
+```
+
+Here, we set the simulator path as shown:
 
 
 ```python

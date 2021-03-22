@@ -4,7 +4,16 @@ In this tutorial, the plotting of in/output bandwidth of the NoC is demonstrated
 
 ## Prerequisite
 
-It is required to compile and retrieve the simulator from the ratatoskr simulator repository. Here, we set the path of the simulator as shown below:
+Before this tutorial, it is required to compile and retrieve the execution simulator program "./sim" from the ratatoskr/simulator repository. 
+Let's compile the simulator:
+```console
+$ cd ../ratatoskr/simulator
+$ cmake
+$ make
+$ cd ../tutorials
+```
+
+Here, we set the simulator path as shown:
 
 
 ```python
