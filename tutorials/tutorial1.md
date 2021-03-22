@@ -4,7 +4,12 @@ Welcome to the tutorial 1 of the ratatoskr-tools. In this section, you will get 
 
 ## Prerequisite
 
-Before this tutorial, it is required to compile and retrieve the execution simulator program "./sim" from the ratatoskr/simulator repository.
+Before this tutorial, it is required to compile and retrieve the execution simulator program "./sim" from the ratatoskr/simulator repository. Here, we set the simulator path as shown:
+
+
+```python
+SIM_PATH = "../ratatoskr/simulator/sim"
+```
 
 ## Network configuration
 
@@ -39,12 +44,12 @@ The generated image is stored in the variable "fig_network" which will be used l
 ```python
 import ratatoskr_tools.networkplot as rtnplt
 
-fig_network = rtnplt.plot_static("./example/network.xml", "./example/config.ini", plt_show=True)
+fig_network = rtnplt.plot_static("./example/network.xml", plt_show=True)
 ```
 
 
     
-![png](tutorial1_files/tutorial1_7_0.png)
+![png](tutorial1_files/tutorial1_8_0.png)
     
 
 
@@ -98,7 +103,7 @@ for idx, inj_rate in enumerate(inj_rates):
 
     rtcfg.edit_config_file(config, "./example/config.xml", "./example/config_tmp.xml", inj_rate)
 
-    rtsim.run_parallel_multiple_sims(simdirs, "./sim", "./example/config.xml", "./example/network.xml")
+    rtsim.run_parallel_multiple_sims(simdirs, SIM_PATH, "./example/config.xml", "./example/network.xml")
 
     vc_usages.append(rtdat.retrieve_vc_usages(simdirs, config))
     buff_usages.append(rtdat.retrieve_buff_usages(simdirs, config))
@@ -122,7 +127,7 @@ fig_latencies = rtdplt.plot_latencies(inj_rates, lats_flit, lats_packet, lats_ne
 
 
     
-![png](tutorial1_files/tutorial1_17_0.png)
+![png](tutorial1_files/tutorial1_18_0.png)
     
 
 

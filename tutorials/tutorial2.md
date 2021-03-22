@@ -25,7 +25,7 @@ Use the provided API to run the ratatoskr GUI client.
 ```python
 import ratatoskr_tools.networkplot as rtnplt
 
-rtnplt.plot_dynamic("./example/network.xml", "./example/config.ini")
+rtnplt.plot_dynamic("./example/network.xml")
 ```
 
 ## Step 3 Run the simulation.
