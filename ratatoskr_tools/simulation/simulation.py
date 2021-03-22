@@ -72,6 +72,7 @@ def run_single_sim(simulator, config_path, network_path, output_dir=".", stdout=
         If it is a string type value, then the output of the program is written to the file
         "output_dir/stdout", by default subprocess.DEVNULL
     """
+    os.environ['SYSTEMC_DISABLE_COPYRIGHT_MESSAGE'] = "1"
 
     if type(stdout) is str:
         stdout = open(os.path.join(output_dir, stdout), "w")
