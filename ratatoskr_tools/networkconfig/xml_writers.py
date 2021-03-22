@@ -304,6 +304,15 @@ class NetworkWriter(Writer):
     def write_header(self):
         bufferDepthType_node = ET.SubElement(self.root_node, 'bufferDepthType')
         bufferDepthType_node.set('value', self.config.bufferDepthType)
+        topology_node = ET.SubElement(self.root_node, 'topology')
+        topology_node.text = self.config.topology
+        abstract_node = ET.SubElement(self.root_node, 'abstract')
+        z_node =  ET.SubElement(abstract_node, 'z')
+        z_node.set('value', str(self.config.z))
+        y_node = ET.SubElement(abstract_node, 'y')
+        y_node.set('value', " ".join([str(var) for var in self.config.y]))
+        x_node = ET.SubElement(abstract_node, 'x')
+        x_node.set('value', " ".join([str(var) for var in self.config.x]))
 
     def write_layers(self):
         layers_node = ET.SubElement(self.root_node, 'layers')
@@ -600,9 +609,7 @@ class ConfigWriter(Writer):
     def write_noc(self):
         noc_node = ET.SubElement(self.root_node, 'noc')
         nocFile_node = ET.SubElement(noc_node, 'nocFile')
-        noc_topology = ET.SubElement(noc_node, 'topology')
         nocFile_node.text = 'config/network.xml'
-        noc_topology.text = self.config.topology
         flitsPerPacket_node = ET.SubElement(noc_node, 'flitsPerPacket')
         flitsPerPacket_node.set('value', str(self.config.flitsPerPacket))
         bitWidth_node = ET.SubElement(noc_node, 'bitWidth')
