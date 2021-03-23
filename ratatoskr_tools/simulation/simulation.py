@@ -74,8 +74,13 @@ def run_single_sim(simulator, config_path, network_path, output_dir=".", stdout=
     """
     os.environ['SYSTEMC_DISABLE_COPYRIGHT_MESSAGE'] = "1"
 
+    if not os.path.isdir(output_dir):
+        os.makedirs(output_dir)
+
     if type(stdout) is str:
-        stdout = open(os.path.join(output_dir, stdout), "w")
+        if not os.path.isdir(os.path.dirname(stdout)):
+            os.makedirs(os.path.dirname(stdout))
+        stdout = open(stdout, "w")
 
     config_path = "--configPath=" + config_path
     network_path = "--networkPath=" + network_path
