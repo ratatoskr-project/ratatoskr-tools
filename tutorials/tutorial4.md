@@ -18,6 +18,7 @@ Here, we set the simulator path as shown:
 
 ```python
 SIM_PATH = "../ratatoskr/simulator/sim"
+SIM_PATH = "../dummy/sim"
 ```
 
 ## Step 1 Download the netrace file.
@@ -25,10 +26,12 @@ Let's download and use the netrace simulation file (blackscholes_64c_simsmall) f
 
 
 ```python
+import os
 from subprocess import call
 
 url = "https://www.cs.utexas.edu/~netrace/download/blackscholes_64c_simsmall.tra.bz2"
-call(["wget", url])
+if not os.path.isfile("blackscholes_64c_simsmall.tra.bz2"):
+    call(["wget", url])
 
 ```
 
@@ -56,7 +59,7 @@ config["Hardware"]["x"] = "[8,8]"
 config["Hardware"]["y"] = "[4,4]"
 config["Hardware"]["z"] = "2"
 config["Hardware"]["clockDelay"] = "[1,1]"
-with open("config.ini", "w") as handle:
+with open("./example/config.ini", "w") as handle:
     config.write(handle)
 cfg = rtcfg.create_configuration("./example/config.ini", "./example/config.xml", "./example/network.xml")
 ```
