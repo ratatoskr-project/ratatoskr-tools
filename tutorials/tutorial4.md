@@ -21,10 +21,12 @@ SIM_PATH = "../ratatoskr/simulator/sim"
 ```
 
 ## Step 1 Download the netrace file.
-We will download and use the netrace simulation file (blackscholes_64c_simsmall) for this tutorial.
+Let's download and use the netrace simulation file (blackscholes_64c_simsmall) for this tutorial. For other netrace trace file, checkout https://www.cs.utexas.edu/~netrace/.
 
 
 ```python
+from subprocess import call
+
 url = "https://www.cs.utexas.edu/~netrace/download/blackscholes_64c_simsmall.tra.bz2"
 call(["wget", url])
 
@@ -47,27 +49,26 @@ clockDelay = [1,1]
 import ratatoskr_tools.networkconfig as rtcfg
 import configparser
 
-rtcfg.create_config_ini("config.ini")
+rtcfg.create_config_ini("./example/config.ini")
 config = configparser.ConfigParser()
-config.read("config.ini")
+config.read("./example/config.ini")
 config["Hardware"]["x"] = "[8,8]"
 config["Hardware"]["y"] = "[4,4]"
 config["Hardware"]["z"] = "2"
 config["Hardware"]["clockDelay"] = "[1,1]"
 with open("config.ini", "w") as handle:
     config.write(handle)
-cfg = rtcfg.create_configuration("config.ini", "config.xml", "network.xml")
+cfg = rtcfg.create_configuration("./example/config.ini", "./example/config.xml", "./example/network.xml")
 ```
 
 ## Step 3 Run the simulation
-The function run_single_sim can accept more kwargs which are acceptable to the simulator (SIM_PATH). Here, we set the simulation time to 10000ns and start from netrace region 0.
-The loggins are written to the log file (stdout).
+The function run_single_sim can accept more kwargs which are acceptable by the simulator (SIM_PATH). Here, we set the simulation time to 10000ns and start from netrace region 0. The verbosity is set to "all", so that you can see all the simulation step in details and this info is written to the "log" file (stdout).
 
 
 ```python
 import ratatoskr_tools.simulation as rtsim
 
-rtsim.run_single_sim(SIM_PATH, "config.xml", "network.xml", output_dir=".", stdout="log",
+rtsim.run_single_sim(SIM_PATH, "./example/config.xml", "./example/network.xml", output_dir="./example/", stdout="./example/log",
     simTime=10000,
     netraceTraceFile="blackscholes_64c_simsmall.tra.bz2",
     netraceRegion=0,
