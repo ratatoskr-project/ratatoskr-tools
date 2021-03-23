@@ -18,7 +18,6 @@ Here, we set the simulator path as shown:
 
 ```python
 SIM_PATH = "../ratatoskr/simulator/sim"
-SIM_PATH = "../dummy/sim"
 ```
 
 ## Step 1 Download the netrace file.
