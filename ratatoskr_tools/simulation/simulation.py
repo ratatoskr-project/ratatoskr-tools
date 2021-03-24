@@ -78,8 +78,9 @@ def run_single_sim(simulator, config_path, network_path, output_dir=".", stdout=
         os.makedirs(output_dir)
 
     if type(stdout) is str:
-        if not os.path.isdir(os.path.dirname(stdout)):
-            os.makedirs(os.path.dirname(stdout))
+        dirname = os.path.dirname(stdout)
+        if not os.path.isdir(dirname) and dirname not in ["", "."]:
+            os.makedirs(dirname)
         stdout = open(stdout, "w")
 
     config_path = "--configPath=" + config_path
