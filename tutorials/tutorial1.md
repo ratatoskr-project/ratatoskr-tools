@@ -10,7 +10,7 @@ Let's compile the simulator:
 $ cd ../ratatoskr/simulator
 $ cmake .
 $ make
-$ cd ../../tutorials
+$ cd ../../ratatoskr-tools/tutorials
 ```
 
 Here, we set the simulator path as shown:
