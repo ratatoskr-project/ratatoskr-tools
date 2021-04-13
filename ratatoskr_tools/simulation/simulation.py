@@ -22,8 +22,7 @@ def make_all_simdirs(basedir, restarts):
         A list of dummy simulation directories.
     """
 
-    simdirs = ["/".join([basedir, "sim{}".format(restart)])
-               for restart in range(restarts)]
+    simdirs = [os.path.join(basedir, "sim{}".format(restart) for restart in range(restarts)]
     cmds = [" ".join(["mkdir", simdir]) for simdir in simdirs]
 
     for cmd in cmds:
@@ -44,8 +43,7 @@ def remove_all_simdirs(basedir, restarts):
         The amount of the simulation that will be repeated.
     """
 
-    simdirs = ["/".join([basedir, "sim{}".format(restart)])
-               for restart in range(restarts)]
+    simdirs = [os.path.join(basedir, "sim{}".format(restart) for restart in range(restarts)]
     cmds = [" ".join(["rm -rf", simdir]) for simdir in simdirs]
 
     for cmd in cmds:
