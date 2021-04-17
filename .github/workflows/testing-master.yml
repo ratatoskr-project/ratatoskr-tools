@@ -1,0 +1,30 @@
+name: Testing Master
+on: 
+  push:
+    branches: [master]
+  pull_request:
+    branches: [master]
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v2
+    - name: Update Ubuntu
+      run: sudo apt update
+    - name: Install Dependencies
+      run: sudo apt -y install libpugixml-dev python3-venv libboost-program-options-dev libboost-system-dev libzmq3-dev build-essential cmake
+    - name: Get SystemC
+      run: mkdir systemc && wget https://accellera.org/images/downloads/standards/systemc/systemc-2.3.3.tar.gz && tar -xf systemc-2.3.3.tar.gz
+    - name: Build SystemC  
+      run: cd systemc-2.3.3 && mkdir objdir && cd objdir && ../configure --prefix=/usr/local/systemc-2.3.3 --enable-static CXXFLAGS="-std=c++17" && make -j && sudo mkdir /usr/local/systemc-2.3.3 && sudo make install && cd ../..
+    - name: Set environment
+      run: export SYSTEMC_DISABLE_COPYRIGHT_MESSAGE=1
+    - name: Checkout Ratatoskr Simulator
+      run: cd .. && git checkout https://github.com/ratatoskr-project/ratatoskr-simulator
+    - name: Build Ratatoskr Simulator
+      run: cd .. && cd ratatoskr-simulator/simulator && ./build.sh && cd ..
+    - name: Installing Ratatoskr-tools
+      run: source source_me.sh && python setup.py install
+    - name: Test Tutorial 1
+      run: source source_me.sh cd tutorials && jupyter nbconvert --to notebook --inplace --execute tutorial1.ipynb
